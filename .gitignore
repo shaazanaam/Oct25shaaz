@@ -12,3 +12,5 @@ yarn-error.log*
 # Optional: IDE settings
 .vscode/
 .DS_Store
+
+/src/generated/prisma
