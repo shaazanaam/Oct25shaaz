@@ -3,19 +3,19 @@ We are now  going to be changing the project to include the NestJS project
 ## MIGRATION PLAN: Transform Current Project to NestJS
 
 ### What we're keeping (DON'T DELETE):
-- ✅ docker-compose.yml (already working)
-- ✅ prisma/ folder (keep schema, but will update it)
-- ✅ .env file (will add new variables)
-- ✅ .git/ folder (preserve Git history)
-- ✅ All .md documentation files
-- ✅ node_modules/ (will be updated)
+- docker-compose.yml (already working)
+- prisma/ folder (keep schema, but will update it)
+- .env file (will add new variables)
+- .git/ folder (preserve Git history)
+- All .md documentation files
+- node_modules/ (will be updated)
 
 ### What we're replacing/updating:
-- 🔄 package.json (add NestJS dependencies)
-- 🔄 app.js → main.ts (NestJS entry point)
-- 🔄 src/ folder structure (convert to NestJS modules)
-- ➕ Add TypeScript configuration files
-- ➕ Add NestJS module files
+-  package.json (add NestJS dependencies)
+-  app.js → main.ts (NestJS entry point)
+-  src/ folder structure (convert to NestJS modules)
+-  Add TypeScript configuration files
+-  Add NestJS module files
 
 ### Step-by-step transformation:
 1. Install NestJS dependencies
@@ -29,8 +29,8 @@ We are now  going to be changing the project to include the NestJS project
 This approach preserves your work while upgrading to NestJS!
 
 ### NEW FEATURES WE'LL GET:
-1. Prisma ORM -- this is already done ✅
-2. PostgreSQL -- done already through the docker compose ✅
+1. Prisma ORM -- this is already done 
+2. PostgreSQL -- done already through the docker compose 
 3. TypeScripts-- Needs to be done to include the type safety
 4. built in validation with the class-validator
 5. Automatic Swagger/OpenAPI docs
