@@ -6,8 +6,8 @@
 "scripts": {
   "build": "tsc -p tsconfig.build.json",
   "start": "node dist/main",
-  "start:dev": "ts-node src/main.ts",
-  "start:debug": "ts-node --inspect-brk src/main.ts",
+  "start:dev": "nodemon --exec ts-node src/main.ts",
+  "start:debug": "nodemon --exec ts-node --inspect-brk src/main.ts",
   "start:prod": "node dist/main",
   "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
   "db:migrate": "npx prisma migrate dev",
