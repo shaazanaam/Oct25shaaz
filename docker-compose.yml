@@ -1,23 +1,39 @@
-version: "3.9"
+# version: "3.9"
 
+# services:
+#   db:
+#     image: postgres:16
+#     container_name: myapp-postgres
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: app
+#       POSTGRES_PASSWORD: app
+#       POSTGRES_DB: appdb
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U app -d appdb"]
+#       interval: 5s
+#       timeout: 3s
+#       retries: 10
+
+# volumes:
+#   pgdata:
+
+
+version: '3.9'
 services:
-  db:
+  postgres:
     image: postgres:16
-    container_name: myapp-postgres
-    restart: unless-stopped
     environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
-      POSTGRES_DB: appdb
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d appdb"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-
-volumes:
-  pgdata:
+      POSTGRES_USER: ai
+      POSTGRES_PASSWORD: ai
+      POSTGRES_DB: ai_platform
+    ports: [ "5432:5432" ]
+    volumes: [ pg:/var/lib/postgresql/data ]
+  redis:
+    image: redis:7
+    ports: [ "6379:6379" ]
+volumes: { pg: {} }

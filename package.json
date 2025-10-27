@@ -2,22 +2,37 @@
   "name": "oct25shaaz",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node app.js",
-    "start": "node app.js",
-    "lint": "eslint .",
-    "db:migrate": "npx prisma migrate dev"
-  },
+  "main": "dist/index.js",
+"scripts": {
+  "build": "tsc -p tsconfig.build.json",
+  "start": "node dist/main",
+  "start:dev": "ts-node src/main.ts",
+  "start:debug": "ts-node --inspect-brk src/main.ts",
+  "start:prod": "node dist/main",
+  "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+  "db:migrate": "npx prisma migrate dev",
+  "db:generate": "npx prisma generate",
+  "db:studio": "npx prisma studio"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@nestjs/common": "^11.1.7",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.7",
+    "@nestjs/platform-express": "^11.1.7",
+    "@nestjs/swagger": "^11.2.1",
     "@prisma/client": "^6.18.0",
+    "@types/node": "^24.9.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "swagger-ui-express": "^5.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
