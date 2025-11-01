@@ -93,7 +93,7 @@ OLD (Express.js style):
 //Javascript , CommonJS require/module.exports
 
 const {PrismaClient} = require('@prisma/client');
-const prisma = globasForPrism.prisma ||  new PrismaClient();
+const prisma = globalForPrism.prisma ||  new PrismaClient();
 module.exports = {prisma};
 
 

@@ -72,3 +72,54 @@ In the docker analogy -------------------
 | Query syntax                   | LINQ (`context.Users.Where(...)`)     | Prisma Client (`prisma.user.findMany()`) |
 | Code generation                | Scaffolds `DbContext` and entities    | Generates typed JS/TS client from schema |
 | Typical runtime use            | `var context = new MyDbContext();`    | `const prisma = new PrismaClient();`     |
+
+
+The skeleton App does the following 
+1. Starts a working NestJS API on port 3000
+2. Connects to the PostgreSQL via Prisma
+3. Provides the user CRUD operations 
+      create users 
+      get all users 
+      get users by the ID 
+4. Automatic API doucmentation at the http://lcoalhost:300/api
+5. Request validation (email format, required fields)
+6. Health check endpoint at/health
+
+NEST JS Log messages 
+
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [NestFactory] Starting Nest application...
+// ↑ NestJS is initializing
+
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [InstanceLoader] ConfigHostModule dependencies initialized +10ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [InstanceLoader] ConfigModule dependencies initialized +0ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [InstanceLoader] AppModule dependencies initialized +0ms
+// ↑ All your modules loaded successfully (ConfigModule, AppModule, etc.)
+
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RoutesResolver] AppController {/}: +18ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RouterExplorer] Mapped {/, GET} route +1ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RouterExplorer] Mapped {/health, GET} route +0ms
+// ↑ Your routes are being registered (GET /, GET /health)
+
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+// ↑ Your user routes registered (GET /users, POST /users, GET /users/:id)
+
+[Nest] 22192  - 11/01/2025, 2:18:39 PM     LOG [NestApplication] Nest application successfully started +9ms
+
+
+
+so when you use the following the 
+
+const app = await NestFactory.create(AppModule);
+
+//  this uses the default logger automatically
+
+ You can also disable all the logs by using the folowing 
+
+ Option1: disable all the logs
+
+ const app = await NestFactory.create(AppModule,{
+      logger: false,
+ })
