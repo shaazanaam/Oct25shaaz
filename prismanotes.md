@@ -81,3 +81,49 @@ const users = await prisma.user.findMany();
 - Prevents connection leaks
 - Development-friendly (survives hot reloads)
 
+
+
+OLD vs the New prism.js and the services/prisma.service.ts
+
+You have two different Prisma setups:
+
+
+OLD (Express.js style): 
+
+//Javascript , CommonJS require/module.exports
+
+const {PrismaClient} = require('@prisma/client');
+const prisma = globasForPrism.prisma ||  new PrismaClient();
+module.exports = {prisma};
+
+
+New (NestJS style)----prisma.service.ts
+
+
+import {Injectable, OnModuleInit} from '@nestjs/common';
+import {PrismaClient}  from '@prisma/client';
+
+@Injectable()
+export class PrismaService extends PrismaClien implements OnModuleInit{
+  async onModuleInit(){
+    await this.$connect();
+  }
+}
+
+
+How to use the old style either in the business logic or the Prisma class
+
+Manual Singletopn 
+
+// utils/prisma.js
+const globalForPrisma = globalThis;
+const prisma = globalForPrisma.prisma || new PrismaClient();
+module.exports = {prisma};
+
+// users.controller.js
+const { prisma } = require('../utils/prisma');  // ← Manual import
+const getUsers = async () => {
+  return await prisma.user.findMany();
+};
+
+

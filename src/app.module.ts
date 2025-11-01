@@ -9,13 +9,13 @@ import { UsersService } from './services/users.service';
 
 
 @Module({
-  imports: [
+  imports: [                      // Other modules this module depends on 
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
   ],
-  controllers: [AppController, UsersController],
-  providers: [PrismaService, UsersService],
+  controllers: [AppController, UsersController],   //HTTP route handlers
+  providers: [PrismaService, UsersService],  // business login, service utilities and database connection 
 })
-export class AppModule {}
+export class AppModule {}   // services other modules want to access// think of it as what other modules borrow from me 
