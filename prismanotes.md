@@ -127,3 +127,161 @@ const getUsers = async () => {
 };
 
 
+PRISMA SCHEMA 
+
+this will be the back bone of the project as the platform  will be dependent  upon the follwing:
+1. Multi tenancy depends on how you store the tenantId
+2. Converstation history /state depends on the conversation +Messages
+3. Agent workflow execution depends on the  Agent and its flowJson
+4. Knowledge base per tenant depends on the "Document"
+5. Integration ( like the ticketing/KM/ Slack ) depend on Tool
+
+Once we do the migration we ill be generating the Prisma client and we then  plug it into the NestJS services 
+We can then immediately start building the endpoints like th efollowing :
+POST/conversations 
+POST/messages
+GET/kb/search
+
+
+So Phase 2 will the locking of the data contracts so that the rest of the app can exists
+
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Multi-Tenancy
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  plan      TenantPlan @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  users         User[]
+  agents        Agent[]
+  tools         Tool[]
+  conversations Conversation[]
+  documents     Document[]
+}
+
+enum TenantPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+// Users & Auth
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(VIEWER)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  AUTHOR
+  VIEWER
+}
+
+// LangGraph Flows (Agents)
+model Agent {
+  id        String      @id @default(cuid())
+  name      String
+  version   String      @default("0.1.0")
+  status    AgentStatus @default(DRAFT)
+  flowJson  Json        // LangGraph flow definition
+  tenantId  String
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  conversations Conversation[]
+}
+
+enum AgentStatus {
+  DRAFT
+  PUBLISHED
+  DISABLED
+}
+
+// Integration Tools (KB, Ticketing, etc.)
+model Tool {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  title        String
+  type         ToolType
+  inputSchema  Json
+  outputSchema Json
+  authType     String   // "service_account" | "oauth" | "api_key"
+  authConfig   Json     // credentials, tokens
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum ToolType {
+  KB_SEARCH
+  TICKET_CREATE
+  SLACK_POST
+  TEAMS_POST
+  CUSTOM
+}
+
+// Conversation State Management
+model Conversation {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String?  // Optional: who started this conversation
+  channel   String?  // "web" | "slack" | "teams"
+  state     Json     // LangGraph state
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  messages  Message[]
+}
+
+// Message History
+model Message {
+  id        String       @id @default(cuid())
+  role      MessageRole  // "user" | "assistant" | "tool" | "system"
+  content   String
+  metadata  Json?        // tool calls, feedback, etc.
+  convoId   String
+  convo     Conversation @relation(fields: [convoId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  TOOL
+  SYSTEM
+}
+
+// Document/KB Management
+model Document {
+  id        String   @id @default(cuid())
+  source    String   // "upload" | "sharepoint" | "confluence"
+  uri       String   // S3 path, URL, etc.
+  title     String
+  metadata  Json     // tags, category, etc.
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

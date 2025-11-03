@@ -8,9 +8,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
+// multi tenancy 
+model Tenant{
+  id    String @id @default(cuid())
+  name  String @unique
+  plan   TenantPlan @default(FREE)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  agents        Agent[]
+  tools         Tool[]
+  coversations  Conversation[]
+  documents     Document[]
 }
+
+enum TenantPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+
+//Users and Auth
+
+model User{
+  id        String @id @default(cuid())
+  email     String @unique
+  name      String?
+  role      UserRole  @default(VIEWER)
+  tenantId  String
+  tenant    TenantPlan@relation(fields: [: [tenantId]], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum  UserRole {
+  ADMIN
+  AUTHOR
+  VIEWER
+}
+
+
+//  LangGraph Flows(Agents)
