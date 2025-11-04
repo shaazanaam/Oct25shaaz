@@ -38,7 +38,7 @@ model User{
   name      String?
   role      UserRole  @default(VIEWER)
   tenantId  String
-  tenant    TenantPlan@relation(fields: [: [tenantId]], references: [id], onDelete: Cascade)
+  tenant    Tenant @relation(fields:  [tenantId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -51,3 +51,93 @@ enum  UserRole {
 
 
 //  LangGraph Flows(Agents)
+
+model Agent{
+  id String @id @default(cuid())
+  name String
+  version String @default("0.1.0")
+  status AgentStatus @default(DRAFT)
+  flowJson Json      //Langraph Flow Definition
+  tenantId String
+  tenant   Tenant @relation(fields:[tenantId], references:[id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  conversations Conversation[]
+}
+
+enum AgentStatus {
+  DRAFT
+  PUBLISHED
+  DISABLED
+}
+
+// Integration Tools (KB, Ticketing, etc.)
+model Tool {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  title        String
+  type         ToolType
+  inputSchema  Json
+  outputSchema Json
+  authType     String   // "service_account" | "oauth" | "api_key"
+  authConfig   Json     // credentials, tokens
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum ToolType {
+  KB_SEARCH
+  TICKET_CREATE
+  SLACK_POST
+  TEAMS_POST
+  CUSTOM
+}
+
+// Conversation State Management
+model Conversation {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String?  // Optional: who started this conversation
+  channel   String?  // "web" | "slack" | "teams"
+  state     Json     // LangGraph state
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  messages  Message[]
+}
+
+// Message History
+model Message {
+  id        String       @id @default(cuid())
+  role      MessageRole  // "user" | "assistant" | "tool" | "system"
+  content   String
+  metadata  Json?        // tool calls, feedback, etc.
+  convoId   String
+  convo     Conversation @relation(fields: [convoId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  TOOL
+  SYSTEM
+}
+
+// Document/KB Management
+model Document {
+  id        String   @id @default(cuid())
+  source    String   // "upload" | "sharepoint" | "confluence"
+  uri       String   // S3 path, URL, etc.
+  title     String
+  metadata  Json     // tags, category, etc.
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

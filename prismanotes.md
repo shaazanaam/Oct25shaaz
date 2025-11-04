@@ -285,3 +285,116 @@ model Document {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+
+// explaination of the meaning of the Model for the Prisma
+We are trying to lock in the data models for the tenants , users , agents , converstions, messages, documents
+
+This is mainly becasue of the following :
+Multitenancy depends on how we stroe the tenantId
+Conversation history /state depends on the Conversaiton+message
+Agent workflow execution depends on the Agent and its flowJson
+Knowledge base  per tenant depends on the Document 
+integration like the ticketing KM /Slack depends on the Tool 
+
+  We need to make  sure that the schema is stable  
+   We then will be generating the Prisma cleint 
+   then :Plug it into the nestJS service 
+    We can immediately start building endpoints like the 
+    POST/conversation 
+    POST/ messages 
+    GET/kb/search
+
+
+
+
+     What each portion of the data model represent 
+
+
+// TENANT 
+
+ A tenant is one customer/ org using  the platform 
+ plan  = feature flags , rate limits , SLA tiers
+
+ Relations 
+ users = people who   log into the dashboard for that tenant
+ agents = AI agents / langraph flows owned by that tenant
+ conversation = conversations happening under that tenant 
+ documents = KB files for that tenant 
+ tools = tenant's integrations ( SLACK , their Zammad etc)
+
+ this model is basically the mutli tenancy anchor and almost everything else will be pointing back to the tenant
+
+
+
+ //USER
+
+  A use is a human admin/agent from that tenant logging into our UI 
+  role controls the permissions in the dashboard
+  ADMIN can configure the tools , flows channels
+  AUTHOR can edit the flows /KB but maybe not billing
+  VIEWER read only (support agent who jsut wathces for example)
+
+  A use is not necesarily the end customer asking "help me reset my password in the chat / This is the internal operator 
+
+  So in NEst JS we will be attahcing this model to the Keylcoak /JWT auth
+
+
+  AGENT
+
+  this is where the LangGraph workflow actually lives 
+
+  Each Agent = one automation brain for the tenant 
+   Example :
+    IT help Desk Bot
+    HR Policy Assistant 
+    Permit FAQ assistant 
+
+    flow Json is how we are going to be persisting the agent's workflow graph ( nodes , edges ,tools to call metc
+    Thats what the Execution layer will load and run)
+
+    status 
+    DRAFT --> being edited , not live
+    PUBLISHED -> currently answering real users
+    Disables - turned off 
+
+    That version lets us  version flow over time and then is samrter for the audit purpose
+
+     the conversation Conversation[]  means that every conversation will be tied back to which Agent handled it 
+     That lets the tenant ask 
+     " Shaow me all the chats where the HR bot struggles 
+     Which bot is creating the most tickers?"
+
+
+
+      Tool
+
+      What this means in practical terms:
+
+A “Tool” is a connector/action that the workflow can call.
+
+KB search
+
+Create ticket in Zammad
+
+Post message to Slack channel
+
+Call internal API
+
+You’re storing:
+
+type: what kind of tool it is (search, ticket, slack, etc.).
+
+inputSchema and outputSchema: how LangGraph should call this tool and what it expects back. (This is great for validation + UI generation later.)
+
+authConfig: this is where you keep creds (API keys, OAuth tokens, etc.) for that tenant’s instance of that integration.
+
+Important:
+tenantId is optional. That means you allow:
+
+Global tool definitions (shared) like “OpenAI LLM Gateway” that you host.
+
+Tenant-scoped tools i.e. “This tenant’s private Zammad instance with its API key.”
+
+That’s exactly what we want in a multi-tenant SaaS. 
