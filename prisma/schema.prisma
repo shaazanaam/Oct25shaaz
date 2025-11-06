@@ -19,7 +19,7 @@ model Tenant{
   users         User[]
   agents        Agent[]
   tools         Tool[]
-  coversations  Conversation[]
+  conversations Conversation[]
   documents     Document[]
 }
 

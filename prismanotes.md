@@ -397,4 +397,59 @@ Global tool definitions (shared) like “OpenAI LLM Gateway” that you host.
 
 Tenant-scoped tools i.e. “This tenant’s private Zammad instance with its API key.”
 
-That’s exactly what we want in a multi-tenant SaaS. 
+
+Example flow Json structure 
+{
+  "nodes": [
+    { "id": "kb_lookup", "type": "tool", "config": {...} },
+    { "id": "get_feedback", "type": "user_input", "config": {...} },
+    { "id": "create_ticket", "type": "tool", "config": {...} }
+  ],
+  "edges": [
+    { "from": "kb_lookup", "to": "get_feedback" },
+    { "from": "get_feedback", "to": "create_ticket", "condition": "negative_feedback" }
+  ]
+}
+
+// load agent's flow for the execution 
+
+const agent = await prisma.agent.findUnique({
+  where:{id:agentId}
+});
+const flow = agent.flowJson;  // Send to LanGraph engine
+
+// then we have the following as the example for the use case for the tool model
+
+// KB Search Tool
+{
+  "name": "elasticsearch_kb",
+  "type": "KB_SEARCH",
+  "inputSchema": { "query": "string" },
+  "outputSchema": { "results": "array", "link": "string" },
+  "authType": "api_key",
+  "authConfig": { "apiKey": "secret123", "endpoint": "http://es:9200" }
+}
+
+// Ticket Creation Tool  
+{
+  "name": "zammad_ticket",
+  "type": "TICKET_CREATE",
+  "inputSchema": { "title": "string", "description": "string" },
+  "outputSchema": { "ticketId": "string", "url": "string" },
+  "authType": "oauth",
+  "authConfig": { "token": "oauth_token_xyz" }
+}
+
+ then there is the conversation model  which is supposed to be one user session with an agent . and then it  stores the LanGraph state - where in  the flow are we ?
+ Multi channel - same conversation across web/Slack/Teams
+
+ {
+  "currentNode": "get_feedback",
+  "query": "How do I reset password?",
+  "kb_result": "https://kb.com/password-reset",
+  "feedback": "didn't help",
+  "variables": {
+    "userEmail": "user@example.com",
+    "previousAttempts": 2
+  }
+}
