@@ -8,14 +8,25 @@ export class UsersService {
 
   async findAll() {
     return this.prisma.user.findMany({
-      orderBy: { id: 'asc' },
+      include: {
+        tenant: true, // Include tenant info in response
+      },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
   async create(createUserDto: CreateUserDto) {
     try {
       return await this.prisma.user.create({
-        data: createUserDto,
+        data: {
+          email: createUserDto.email,
+          name: createUserDto.name,
+          tenantId: createUserDto.tenantId,
+          role: createUserDto.role as any, // Cast role to UserRole enum
+        },
+        include: {
+          tenant: true, // Return tenant info with created user
+        },
       });
     } catch (error) {
       if (error.code === 'P2002') {
@@ -25,9 +36,12 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
+      include: {
+        tenant: true, // Include tenant info
+      },
     });
   }
 }
