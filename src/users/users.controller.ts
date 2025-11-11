@@ -8,8 +8,8 @@ import {
   Request,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { UsersService } from "../services/users.service";
-import { CreateUserDto } from "../users/dto/create-user.dto";
+import { UsersService } from "./users.service";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { TenantGuard } from "../guards/tenant.guard";
 
 @ApiTags("users")
