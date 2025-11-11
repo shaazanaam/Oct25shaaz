@@ -6,8 +6,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(tenantId: string) {
     return this.prisma.user.findMany({
+      where: { tenantId }, // ← Filter by tenant
       include: {
         tenant: true, // Include tenant info in response
       },

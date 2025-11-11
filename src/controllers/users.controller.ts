@@ -1,18 +1,22 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { TenantGuard } from '../guards/tenant.guard';
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(TenantGuard)  // ← Protect all user endpoints
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'List of all users' })
-  async findAll() {
-    return this.usersService.findAll();
+  @ApiOperation({ summary: 'Get all users for the current tenant' })
+  @ApiResponse({ status: 200, description: 'List of all users for this tenant' })
+  @ApiResponse({ status: 400, description: 'X-Tenant-Id header missing' })
+  @ApiResponse({ status: 403, description: 'Invalid tenant ID' })
+  async findAll(@Request() req) {
+    return this.usersService.findAll(req.tenant.id);
   }
 
   @Post()

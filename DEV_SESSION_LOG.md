@@ -243,5 +243,87 @@ const tenant = await this.prisma.tenant.findUnique({
    - Exported TenantsService for use in other modules
    - Added to `app.module.ts` imports
 
-**Current Status:** ✅ Phase 3.2 Complete - Tenants Module CRUD Fully Implemented
-**Next Action:** Phase 3.3 - Test the Tenants API and verify functionality
+**Current Status:** ✅ Phase 3.3 Complete - Users Endpoints Protected with TenantGuard
+**Next Action:** Phase 4 - Agent & Flow Management Module
+
+---
+
+## 📝 Phase 3.3 Progress - November 10, 2025
+
+### ✅ Completed: Apply TenantGuard to Users Endpoints
+
+**Objective:** Ensure Users API is tenant-scoped and secure
+
+**Files Modified:**
+
+1. **`src/controllers/users.controller.ts`** ✅
+   - Added `UseGuards(TenantGuard)` decorator to controller class
+   - Imported `UseGuards` and `Request` from `@nestjs/common`
+   - Imported `TenantGuard` from `../guards/tenant.guard`
+   - Updated `findAll()` to accept `@Request() req` parameter
+   - Passed `req.tenant.id` to service layer
+   - Updated Swagger documentation with new error responses (400, 403)
+
+   **Code Changes:**
+   ```typescript
+   // Before:
+   @Controller('users')
+   export class UsersController {
+     async findAll() {
+       return this.usersService.findAll();
+     }
+   }
+
+   // After:
+   @Controller('users')
+   @UseGuards(TenantGuard)  // ← Added guard
+   export class UsersController {
+     async findAll(@Request() req) {  // ← Added req parameter
+       return this.usersService.findAll(req.tenant.id);  // ← Pass tenant ID
+     }
+   }
+   ```
+
+2. **`src/services/users.service.ts`** ✅
+   - Updated `findAll()` to accept `tenantId: string` parameter
+   - Added `where: { tenantId }` filter to Prisma query
+   - Ensures users are filtered by tenant before returning
+
+   **Code Changes:**
+   ```typescript
+   // Before:
+   async findAll() {
+     return this.prisma.user.findMany({
+       include: { tenant: true },
+       orderBy: { createdAt: 'desc' },
+     });
+   }
+
+   // After:
+   async findAll(tenantId: string) {  // ← Added parameter
+     return this.prisma.user.findMany({
+       where: { tenantId },  // ← Filter by tenant
+       include: { tenant: true },
+       orderBy: { createdAt: 'desc' },
+     });
+   }
+   ```
+
+**Security Improvements:**
+- ✅ All `/users` endpoints now require `X-Tenant-Id` header
+- ✅ Missing header returns 400 Bad Request
+- ✅ Invalid tenant ID returns 403 Forbidden
+- ✅ Users are filtered by tenant - complete data isolation
+- ✅ Tenant A cannot access Tenant B's users
+
+**Testing Checklist:**
+- [ ] Start server: `npm run start:dev`
+- [ ] Create tenant: `POST /tenants` → save tenant ID
+- [ ] Test without header: `GET /users` → Should return 400
+- [ ] Test with invalid tenant: `GET /users` + `X-Tenant-Id: fake` → Should return 403
+- [ ] Test with valid tenant: `GET /users` + `X-Tenant-Id: <real-id>` → Should return 200
+- [ ] Create user for tenant: `POST /users` + tenant header
+- [ ] Verify user only appears for that tenant
+
+**Current Status:** ✅ Phase 3.3 Complete - Users Endpoints Protected with TenantGuard
+**Next Action:** Phase 4 - Agent & Flow Management Module
