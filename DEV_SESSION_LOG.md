@@ -1,15 +1,135 @@
-# Development Session Log - November 6, 2025
+# Development Session Log
+
+---
+
+## Session: November 11, 2025 - Phase 4.1: Agent DTOs
+
+**Session Start:** November 11, 2025  
+**Current Phase:** Phase 4 - Agent & Flow Management  
+**Last Commit:** `dab1d0e` - "refactor: reorganize users module to follow NestJS best practices"  
+**Session Goal:** Create Agent DTOs and prepare for service implementation
+
+### Session Overview
+
+**What We Built Today:**
+1. Refactored Users module to module-based structure
+2. Created Agent DTOs for Phase 4.1
+3. Updated all documentation (removed emojis, updated progress)
+
+### Work Completed
+
+#### 1. Users Module Refactoring
+**Problem:** Users module was scattered across `src/dto/`, `src/controllers/`, `src/services/`  
+**Solution:** Consolidated into module-based structure
+
+**Changes Made:**
+- Created `src/users/` directory
+- Moved `create-user.dto.ts` to `src/users/dto/`
+- Moved `users.controller.ts` to `src/users/`
+- Moved `users.service.ts` to `src/users/`
+- Created `src/users/users.module.ts`
+- Updated all import paths
+- Registered `UsersModule` in `app.module.ts`
+- Deleted old `src/dto/` folder
+- Tested server - all endpoints working
+
+**Why This Matters:**
+- Follows NestJS best practices
+- Matches structure of TenantsModule
+- Makes codebase more maintainable
+- Sets pattern for AgentsModule
+
+#### 2. Agent DTOs Created (Phase 4.1)
+
+**Files Created:**
+
+1. **`src/agents/dto/create-agent.dto.ts`**
+   - Validates agent creation input
+   - Required: `name`, `flowJson`, `tenantId`
+   - Optional: `version` (defaults to "0.1.0")
+   - Full Swagger documentation with LangGraph workflow examples
+
+2. **`src/agents/dto/update-agent.dto.ts`**
+   - Uses `PartialType(CreateAgentDto)`
+   - Allows partial updates of any agent field
+
+3. **`src/agents/dto/update-agent-status.dto.ts`**
+   - Validates status changes
+   - Enum: DRAFT, PUBLISHED, DISABLED
+   - Custom error messages
+
+**Validation Approach:**
+- `@IsString()` for name, version, tenantId
+- `@IsObject()` for flowJson (LangGraph workflow)
+- `@IsEnum()` for status changes
+- `@IsNotEmpty()` for required fields
+- `@IsOptional()` for version field
+
+#### 3. Documentation Updates
+- Removed all emojis from 16+ markdown files
+- Professional, enterprise-ready appearance
+- Maintained all content and structure
+
+### Decisions Made
+
+**Q: Should we use centralized dto folder or module-based?**  
+**Decision:** Module-based (`src/agents/dto/`)  
+**Reasoning:**
+- Follows NestJS best practices
+- Better encapsulation
+- Easier to maintain
+- Matches TenantsModule structure
+
+**Q: What type should flowJson be?**  
+**Decision:** `object` type with `@IsObject()` validator  
+**Reasoning:**
+- Flexible for different LangGraph workflow structures
+- Prisma schema uses `Json` type (supports any valid JSON)
+- Can add stricter validation later if needed
+
+### Testing Notes
+- TypeScript compilation: No errors
+- Server startup: Successful
+- Swagger UI: Accessible at http://localhost:3000/api
+- All endpoints working (tenants, users)
+
+### Next Session
+
+**Phase 4.2: Implement AgentsService**
+
+Files to create:
+- `src/agents/agents.service.ts`
+
+Methods to implement:
+```typescript
+create(createAgentDto)      // Create new agent
+findAll(tenantId)           // List all agents for tenant
+findOne(id, tenantId)       // Get single agent
+update(id, tenantId, dto)   // Update agent
+updateStatus(id, tenantId, status)  // Change status
+remove(id, tenantId)        // Delete agent
+```
+
+**Key considerations:**
+- Always filter by tenantId (security!)
+- Include `_count` for conversations
+- Handle Prisma errors (P2002, P2025)
+- Validate flowJson is valid JSON
+
+**Estimated time:** 45 minutes
+
+---
+
+## Session: November 6, 2025 - Phase 3: Multi-Tenancy Foundation
 
 **Session Start:** November 6, 2025  
 **Current Phase:** Phase 3 - Multi-Tenancy Foundation  
 **Last Commit:** `11c5d3a` - "feat: implement multi-tenant AI platform schema"  
 **Session Goal:** Build tenant isolation layer for AI authoring platform
 
----
+### Session Overview
 
-## Session Overview
-
-### What We're Building Today
+**What We're Building Today:**
 **Multi-tenant guard system** that ensures every API request is associated with a valid tenant, providing complete data isolation for the AI platform.
 
 ### Why This Matters

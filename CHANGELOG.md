@@ -4,6 +4,44 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [2025-11-11] - Phase 4.1 Complete: Agent DTOs Created
+
+### Added - Phase 4.1: Agent DTOs
+
+**New Files Created:**
+- `src/agents/dto/create-agent.dto.ts` - Input validation for agent creation
+- `src/agents/dto/update-agent.dto.ts` - Partial updates using PartialType
+- `src/agents/dto/update-agent-status.dto.ts` - Status change validation
+
+**Features:**
+- `CreateAgentDto` validates: name, version (optional), flowJson (LangGraph workflow), tenantId
+- `UpdateAgentDto` allows partial updates of all agent fields
+- `UpdateAgentStatusDto` validates status transitions (DRAFT/PUBLISHED/DISABLED)
+- Full Swagger/OpenAPI documentation with examples
+- Type-safe validation decorators (@IsString, @IsObject, @IsEnum, etc.)
+
+**Refactoring:**
+- Reorganized Users module to follow NestJS module-based structure
+- Moved all user files to `src/users/` directory
+- Created `UsersModule` with proper encapsulation
+- Updated all import paths across the codebase
+- Deleted old centralized `src/dto/` folder
+
+**Documentation:**
+- Removed all emojis from markdown files for professional appearance
+- Updated 16+ documentation files
+
+**Progress:**
+- Phase 4: 25% complete (Task 4.1 done, 4.2-4.4 remaining)
+- Overall: 40.625% (3.25 of 8 phases complete)
+
+**Next Steps:**
+- Phase 4.2: Implement AgentsService (business logic)
+- Phase 4.3: Implement AgentsController (API endpoints)
+- Phase 4.4: Testing & Validation
+
+---
+
 ## [2025-11-10] - Phase 3 Complete: Multi-Tenancy Foundation
 
 ### Major Milestone

@@ -1,4 +1,4 @@
-# 🛣️ AI Platform Development Roadmap
+# AI Platform Development Roadmap
 
 **Project:** Multi-Tenant LangGraph AI Authoring Platform  
 **Started:** November 5, 2025  
@@ -7,24 +7,24 @@
 
 ---
 
-## 📊 Progress Overview
+## Progress Overview
 
 ```
 Phase 1: ████████████████████ 100%  Complete
 Phase 2: ████████████████████ 100%  Complete
 Phase 3: ████████████████████ 100%  Complete
-Phase 4: ░░░░░░░░░░░░░░░░░░░░   0% 🎯 In Progress
+Phase 4: █████░░░░░░░░░░░░░░░  25%  In Progress (Task 4.1 done)
 Phase 5: ░░░░░░░░░░░░░░░░░░░░   0%  Planned
 Phase 6: ░░░░░░░░░░░░░░░░░░░░   0%  Planned
 Phase 7: ░░░░░░░░░░░░░░░░░░░░   0%  Planned
 Phase 8: ░░░░░░░░░░░░░░░░░░░░   0%  Planned
 ```
 
-**Overall Progress:** 37.5% (3 of 8 phases complete)
+**Overall Progress:** 40.625% (3.25 of 8 phases complete)
 
 ---
 
-##  Phase 1: Foundation Setup
+## Phase 1: Foundation Setup
 **Status:** Complete  
 **Completed:** November 5, 2025  
 **Time Spent:** 2 hours
@@ -171,27 +171,61 @@ GET    /users/:id      - Get user by ID
 
 ---
 
-## 🎯 Phase 4: Agent & Flow Management
-**Status:** In Progress  
+## Phase 4: Agent & Flow Management
+**Status:** In Progress (25% complete)
 **Started:** November 11, 2025  
 **Target Completion:** November 12, 2025  
 **Estimated Time:** 2-3 hours
 
 ### Goals
-- [ ] Create Agents CRUD module
-- [ ] Store LangGraph workflows as JSON
-- [ ] Version management for agents
-- [ ] Status control (DRAFT/PUBLISHED/DISABLED)
-- [ ] Tenant isolation for agents
-- [ ] Relationship with Conversations
+- [x] Create Agent DTOs (Phase 4.1)
+- [ ] Implement AgentsService (Phase 4.2)
+- [ ] Implement AgentsController (Phase 4.3)
+- [ ] Testing & Validation (Phase 4.4)
 
-### Planned Deliverables
-- `src/agents/agents.module.ts`
-- `src/agents/agents.controller.ts`
-- `src/agents/agents.service.ts`
-- `src/agents/dto/create-agent.dto.ts`
-- `src/agents/dto/update-agent.dto.ts`
-- `src/agents/dto/update-agent-status.dto.ts`
+### Tasks Breakdown
+
+#### Phase 4.1: Create Agent DTOs (COMPLETED)
+**Time Spent:** 30 minutes  
+**Completed:** November 11, 2025
+
+- [x] `src/agents/dto/create-agent.dto.ts` - Validates name, version, flowJson, tenantId
+- [x] `src/agents/dto/update-agent.dto.ts` - PartialType for flexible updates
+- [x] `src/agents/dto/update-agent-status.dto.ts` - Status enum validation
+
+#### Phase 4.2: Implement AgentsService (NEXT)
+**Estimated Time:** 45 minutes  
+**Status:** Not started
+
+Methods to implement:
+- `create()` - Create new agent with duplicate name detection
+- `findAll(tenantId)` - List all agents for tenant with conversation counts
+- `findOne(id, tenantId)` - Get single agent with ownership validation
+- `update(id, tenantId, dto)` - Update agent with conflict detection  
+- `updateStatus(id, tenantId, status)` - Change agent status with validation
+- `remove(id, tenantId)` - Delete agent (check for active conversations)
+
+#### Phase 4.3: Implement AgentsController (PENDING)
+**Estimated Time:** 30 minutes
+
+Endpoints to create:
+- POST /agents
+- GET /agents  
+- GET /agents/:id
+- PATCH /agents/:id
+- PATCH /agents/:id/status
+- DELETE /agents/:id
+
+#### Phase 4.4: Testing & Validation (PENDING)
+**Estimated Time:** 30 minutes
+
+### Deliverables Created
+- [x] `src/agents/dto/create-agent.dto.ts`
+- [x] `src/agents/dto/update-agent.dto.ts`
+- [x] `src/agents/dto/update-agent-status.dto.ts`
+- [ ] `src/agents/agents.service.ts`
+- [ ] `src/agents/agents.controller.ts`
+- [ ] `src/agents/agents.module.ts`
 
 ### API Endpoints to Build
 ```
