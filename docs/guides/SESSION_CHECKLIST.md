@@ -4,7 +4,7 @@
 
 ---
 
-## ✅ Pre-Session Checklist (5 minutes)
+##  Pre-Session Checklist (5 minutes)
 
 ### 1. Environment Verification
 ```bash
@@ -86,14 +86,14 @@ npm run db:studio
 
 ### Cross-Reference Questions
 Ask yourself frequently:
-- ✅ **Is this in the roadmap?** Check `ROADMAP.md`
-- ✅ **Does this follow the phase plan?** Check `PHASE_X_GUIDE.md`
-- ✅ **Will this break existing features?** Check `CHANGELOG.md`
-- ✅ **Is this consistent with project architecture?** Check `README.md`
+-  **Is this in the roadmap?** Check `ROADMAP.md`
+-  **Does this follow the phase plan?** Check `PHASE_X_GUIDE.md`
+-  **Will this break existing features?** Check `CHANGELOG.md`
+-  **Is this consistent with project architecture?** Check `README.md`
 
 ---
 
-## ✅ Post-Task Checklist
+##  Post-Task Checklist
 
 After completing each major task:
 
@@ -146,7 +146,7 @@ git commit -m "feat(phase-4): implement agents service with CRUD operations"
 
 ---
 
-## ✅ End-of-Session Checklist (10 minutes)
+##  End-of-Session Checklist (10 minutes)
 
 ### 1. Update All Documentation
 - [ ] `ROADMAP.md` - Mark completed tasks, update progress %
@@ -227,7 +227,7 @@ Before marking a phase as complete:
 
 ### Documentation
 - [ ] Created phase explanation doc (e.g., `AGENTS_MODULE_EXPLANATION.md`)
-- [ ] Updated `ROADMAP.md` with ✅ checkmarks
+- [ ] Updated `ROADMAP.md` with  checkmarks
 - [ ] Added detailed `CHANGELOG.md` entry
 - [ ] Updated `README.md` if needed
 - [ ] Committed all changes with clear message

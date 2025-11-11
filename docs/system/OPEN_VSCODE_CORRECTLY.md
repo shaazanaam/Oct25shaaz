@@ -17,7 +17,7 @@ code .                              # ← Opens folder only
 
 ---
 
-## ✅ RIGHT WAY (With Automatic Reminders)
+##  RIGHT WAY (With Automatic Reminders)
 
 ```bash
 cd c:\Users\600790\Oct25shaaz
@@ -25,11 +25,11 @@ code ai-platform.code-workspace     # ← Opens workspace file
 ```
 
 **What happens:**
-- ✅ Terminal automatically shows reminder
-- ✅ 8-step workflow displayed
-- ✅ Environment checks (Docker, Git)
-- ✅ Current phase and tasks shown
-- ✅ Optionally opens documentation files
+-  Terminal automatically shows reminder
+-  8-step workflow displayed
+-  Environment checks (Docker, Git)
+-  Current phase and tasks shown
+-  Optionally opens documentation files
 
 ---
 
@@ -64,20 +64,20 @@ code ai-platform.code-workspace     # ← Opens workspace file
 │                                                             │
 │  📋 SESSION WORKFLOW REMINDER                               │
 │                                                             │
-│  1. ✅ Open START_HERE.md (1 min)                          │
-│  2. ✅ Run SESSION_CHECKLIST.md pre-checks (5 min)         │
+│  1.  Open START_HERE.md (1 min)                          │
+│  2.  Run SESSION_CHECKLIST.md pre-checks (5 min)         │
 │  ... [full workflow displayed]                              │
 │                                                             │
 │  🔍 Checking Prerequisites...                               │
-│  ✅ Docker is running                                       │
-│  ✅ PostgreSQL container running                            │
-│  ✅ Redis container running                                 │
+│   Docker is running                                       │
+│   PostgreSQL container running                            │
+│   Redis container running                                 │
 │                                                             │
 │  🎯 CURRENT PHASE: Phase 4 - Agent & Flow Management       │
 │                                                             │
-│  ✅ Clear guidance                                          │
-│  ✅ Can't forget steps                                      │
-│  ✅ Auto-opens docs (optional)                              │
+│   Clear guidance                                          │
+│   Can't forget steps                                      │
+│   Auto-opens docs (optional)                              │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```

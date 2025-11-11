@@ -1,4 +1,4 @@
-# 🤖 AI Authoring Platform - Multi-Tenant LangGraph Backend
+# AI Authoring Platform - Multi-Tenant LangGraph Backend
 
 [![NestJS](https://img.shields.io/badge/NestJS-11.1.7-E0234E?logo=nestjs)](https://nestjs.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19.0-2D3748?logo=prisma)](https://www.prisma.io/)
@@ -10,7 +10,7 @@
 
 ---
 
-## 🚀 **New to This Project?**
+## New to This Project?
 
 **Start here:** Run `.\start-session.bat` (Windows) or `./start-session.sh` (Mac/Linux) to see the development workflow reminder.
 
@@ -20,21 +20,21 @@ See [`docs/guides/START_HERE.md`](docs/guides/START_HERE.md) for next steps.
 
 ---
 
-## 🌟 **What Makes This Special**
+## What Makes This Special
 
 This isn't just another CRUD API. This is a **complete AI platform architecture** designed for:
 
-- 🏢 **True Multi-Tenancy** - Complete data isolation with tenant-scoped guards
-- 🤖 **LangGraph Integration** - Store and execute complex AI workflows as JSON
-- 💬 **Conversation State Management** - Redis-backed stateful conversations
-- 📚 **Knowledge Base Management** - Document ingestion and semantic search
-- 🔌 **Tool Orchestration** - Dynamic integration layer (Slack, Zammad, custom APIs)
-- 🎯 **Type-Safe** - End-to-end TypeScript with Prisma for bulletproof typing
-- 📊 **Production Ready** - Docker Compose, migrations, error handling, and Swagger docs
+- **True Multi-Tenancy** - Complete data isolation with tenant-scoped guards
+- **LangGraph Integration** - Store and execute complex AI workflows as JSON
+- **Conversation State Management** - Redis-backed stateful conversations
+- **Knowledge Base Management** - Document ingestion and semantic search
+- **Tool Orchestration** - Dynamic integration layer (Slack, Zammad, custom APIs)
+- **Type-Safe** - End-to-end TypeScript with Prisma for bulletproof typing
+- **Production Ready** - Docker Compose, migrations, error handling, and Swagger docs
 
 ---
 
-## 🎯 **The Vision**
+## The Vision
 
 Build an AI support system where:
 1. **User asks a question** → AI searches knowledge base
@@ -44,15 +44,15 @@ Build an AI support system where:
 5. **Each customer isolated** → Multi-tenant architecture ensures data privacy
 
 **Use Cases:**
-- 🎓 Enterprise AI Support Systems
-- 🏥 Healthcare Chatbots with HIPAA Compliance
-- 🏦 Financial Services AI Agents
-- 🛒 E-commerce Customer Service Automation
-- 📞 Multi-Client SaaS AI Platforms
+- Enterprise AI Support Systems
+- Healthcare Chatbots with HIPAA Compliance
+- Financial Services AI Agents
+- E-commerce Customer Service Automation
+- Multi-Client SaaS AI Platforms
 
 ---
 
-## 🏗️ **Architecture Highlights**
+## Architecture Highlights
 
 ### **Multi-Tenant Security Layer**
 Every API request validates tenant context using a custom NestJS guard:
@@ -96,7 +96,7 @@ Tenant (Multi-tenancy root)
 
 ---
 
-## 🚀 **Tech Stack**
+## Tech Stack
 
 ### **Backend Framework**
 - **NestJS 11.1.7** - Enterprise-grade Node.js framework
@@ -116,7 +116,7 @@ Tenant (Multi-tenancy root)
 
 ---
 
-## 📊 **Project Structure**
+## Project Structure
 
 ```
 src/
@@ -151,7 +151,7 @@ docker-compose.yml                   # PostgreSQL + Redis
 
 ---
 
-## ⚡ **Quick Start**
+## Quick Start
 
 ### **Prerequisites**
 - Node.js 20+
@@ -213,7 +213,7 @@ Swagger docs: **http://localhost:3000/api**
 
 ---
 
-## 📚 **API Endpoints**
+## API Endpoints
 
 ### **Health Check**
 ```http
@@ -238,7 +238,7 @@ GET    /users/:id    # Get user by ID
 
 ---
 
-## 🔒 **Security Features**
+## Security Features
 
 ### **1. Tenant Isolation**
 ```typescript
@@ -270,14 +270,14 @@ export class CreateTenantDto {
 
 ### **4. Cascade Delete Protection**
 Deleting a tenant removes ALL related data:
-- ⚠️ All users
-- ⚠️ All agents & workflows
-- ⚠️ All conversations & messages
-- ⚠️ All documents
+- All users
+- All agents & workflows
+- All conversations & messages
+- All documents
 
 ---
 
-## 🗄️ **Database Schema**
+## Database Schema
 
 ### **Core Models**
 
@@ -320,7 +320,7 @@ model Tool {
 
 ---
 
-## 🧪 **Testing with Swagger**
+## Testing with Swagger
 
 1. Start server: `npm run start:dev`
 2. Open: http://localhost:3000/api
@@ -336,14 +336,14 @@ model Tool {
 
 ---
 
-## 🛣️ **Development Roadmap**
+## Development Roadmap
 
-- [x] **Phase 1**: NestJS foundation, Docker, TypeScript ✅
-- [x] **Phase 2**: Prisma schema with 7 models (Tenant, User, Agent, Tool, Conversation, Message, Document) ✅
-- [x] **Phase 3.1**: TenantGuard for multi-tenant security ✅
-- [x] **Phase 3.2**: Tenants CRUD module ✅
-- [x] **Phase 3.3**: Apply TenantGuard to all endpoints ✅
-- [ ] **Phase 4**: Agents module (LangGraph flow management) 🎯
+- [x] **Phase 1**: NestJS foundation, Docker, TypeScript
+- [x] **Phase 2**: Prisma schema with 7 models (Tenant, User, Agent, Tool, Conversation, Message, Document)
+- [x] **Phase 3.1**: TenantGuard for multi-tenant security
+- [x] **Phase 3.2**: Tenants CRUD module
+- [x] **Phase 3.3**: Apply TenantGuard to all endpoints
+- [ ] **Phase 4**: Agents module (LangGraph flow management) - IN PROGRESS
 - [ ] **Phase 5**: Conversations module (Redis state management)
 - [ ] **Phase 6**: Tools module (KB search, ticketing integrations)
 - [ ] **Phase 7**: Authentication & Authorization (JWT + RBAC)
@@ -353,13 +353,13 @@ model Tool {
 
 ---
 
-## 🤝 **Contributing**
+## Contributing
 
 This is a learning project showcasing enterprise-grade architecture patterns. Suggestions and improvements welcome!
 
 ---
 
-## 📝 **Documentation**
+## Documentation
 
 - `START_HERE.md` - Developer onboarding guide
 - `DEV_SESSION_LOG.md` - Development decision log
@@ -369,7 +369,7 @@ This is a learning project showcasing enterprise-grade architecture patterns. Su
 
 ---
 
-## 🏆 **Why This Architecture?**
+## Why This Architecture?
 
 ### **Scalability**
 - Horizontal scaling with tenant sharding
@@ -393,20 +393,20 @@ This is a learning project showcasing enterprise-grade architecture patterns. Su
 
 ---
 
-## 📄 **License**
+## License
 
 ISC
 
 ---
 
-## 👨‍💻 **Author**
+## Author
 
 **Shaurya** - [GitHub](https://github.com/shaazanaam)
 
-*Building the future of AI-powered customer support, one commit at a time.* 🚀
+*Building the future of AI-powered customer support, one commit at a time.*
 
 ---
 
-## ⭐ **If This Helped You**
+## If This Helped You
 
-Give it a star ⭐ and let me know what you're building with it!
+Give it a star and let me know what you're building with it!

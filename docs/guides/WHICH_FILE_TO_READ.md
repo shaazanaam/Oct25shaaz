@@ -7,7 +7,7 @@
 
 ## 🎯 **Starting Your Day? Read This Order:**
 
-### 1️⃣ **START_HERE.md** (2 min read)
+###  **START_HERE.md** (2 min read)
 **When:** Every session start  
 **Purpose:** Quick orientation - where am I, what's next?  
 **Contains:**
@@ -20,12 +20,12 @@
 
 ---
 
-### 2️⃣ **SESSION_CHECKLIST.md** (5 min read + actions)
+###  **SESSION_CHECKLIST.md** (5 min read + actions)
 **When:** Beginning AND end of every session  
 **Purpose:** Pre-flight checks and post-flight verification  
 **Contains:**
-- ✅ Pre-session checklist (Docker running? Git updated? etc.)
-- ✅ Post-session checklist (Tests pass? Docs updated? Git committed?)
+-  Pre-session checklist (Docker running? Git updated? etc.)
+-  Post-session checklist (Tests pass? Docs updated? Git committed?)
 - Environment verification steps
 - Git workflow reminders
 
@@ -33,7 +33,7 @@
 
 ---
 
-### 3️⃣ **ROADMAP.md** (3 min read)
+###  **ROADMAP.md** (3 min read)
 **When:** Once per session to check overall progress  
 **Purpose:** The master plan - see the big picture  
 **Contains:**
@@ -47,7 +47,7 @@
 
 ---
 
-### 4️⃣ **PHASE_4_GUIDE.md** (Keep open while coding)
+###  **PHASE_4_GUIDE.md** (Keep open while coding)
 **When:** While actively working on Phase 4 tasks  
 **Purpose:** Step-by-step implementation instructions  
 **Contains:**

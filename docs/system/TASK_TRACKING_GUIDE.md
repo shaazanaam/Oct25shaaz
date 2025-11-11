@@ -9,12 +9,12 @@
 
 A **real-time task tracking system** that:
 
-- ✅ **Updates instantly** when you complete tasks
-- ✅ **Persists across sessions** (saved in `.session-state.json`)
-- ✅ **Shows live progress** (0%, 25%, 50%, 75%, 100%)
-- ✅ **Integrates with reminder** (shown when you open workspace)
-- ✅ **Simple CLI commands** (start, complete, list)
-- ✅ **Interactive mode** for easy use
+-  **Updates instantly** when you complete tasks
+-  **Persists across sessions** (saved in `.session-state.json`)
+-  **Shows live progress** (0%, 25%, 50%, 75%, 100%)
+-  **Integrates with reminder** (shown when you open workspace)
+-  **Simple CLI commands** (start, complete, list)
+-  **Interactive mode** for easy use
 
 ---
 
@@ -76,7 +76,7 @@ node track-tasks.js complete 1
 
 **Output:**
 ```
-✅ Marked task 4.1 as complete!
+ Marked task 4.1 as complete!
 📊 Phase progress: 25%
 
 ════════════════════════════════════════════════════════════════
@@ -84,7 +84,7 @@ node track-tasks.js complete 1
   Progress: 25% | Overall: 37.5%
 ════════════════════════════════════════════════════════════════
 
-  1. ✅ 4.1 Create Agent DTOs (completed 2:34 PM)  ← DONE!
+  1.  4.1 Create Agent DTOs (completed 2:34 PM)  ← DONE!
   2. ⬜ 4.2 Implement AgentsService (45 min)
   3. ⬜ 4.3 Implement AgentsController (30 min)
   4. ⬜ 4.4 Testing & Validation (30 min)
@@ -109,7 +109,7 @@ node track-tasks.js interactive
   Progress: 25% | Overall: 37.5%
 ════════════════════════════════════════════════════════════════
 
-  1. ✅ 4.1 Create Agent DTOs (completed 2:34 PM)
+  1.  4.1 Create Agent DTOs (completed 2:34 PM)
   2. ⬜ 4.2 Implement AgentsService (45 min)
   3. ⬜ 4.3 Implement AgentsController (30 min)
   4. ⬜ 4.4 Testing & Validation (30 min)
@@ -163,7 +163,7 @@ node track-tasks.js complete <number>
 ```bash
 node track-tasks.js complete 2
 ```
-Marks task 2 as done (✅), updates progress to 50%
+Marks task 2 as done (), updates progress to 50%
 
 ---
 
@@ -269,10 +269,10 @@ node track-tasks.js list
 ```
 
 **Features:**
-- ✅ Persists across terminal sessions
-- ✅ Tracks completion time
-- ✅ Calculates progress automatically
-- ✅ Committed to Git (track progress across computers)
+-  Persists across terminal sessions
+-  Tracks completion time
+-  Calculates progress automatically
+-  Committed to Git (track progress across computers)
 
 ---
 
@@ -282,7 +282,7 @@ node track-tasks.js list
 |------|--------|---------|
 | ⬜ | `not-started` | Task not yet begun |
 | 🔄 | `in-progress` | Currently working on this |
-| ✅ | `completed` | Task finished |
+|  | `completed` | Task finished |
 
 **Only ONE task can be "in-progress" at a time!**
 
@@ -472,7 +472,7 @@ new Date(task.completedAt).toLocaleTimeString('en-US', {
 ### After Completing Task 1
 ```
 Progress: 25% | Overall: 37.5%
-  ✅ 4.1 Create Agent DTOs (completed 2:34 PM)
+   4.1 Create Agent DTOs (completed 2:34 PM)
   ⬜ 4.2 Implement AgentsService (45 min)
   ⬜ 4.3 Implement AgentsController (30 min)
   ⬜ 4.4 Testing & Validation (30 min)
@@ -483,8 +483,8 @@ Progress: 25% | Overall: 37.5%
 ### After Completing Tasks 1 & 2
 ```
 Progress: 50% | Overall: 37.5%
-  ✅ 4.1 Create Agent DTOs (completed 2:34 PM)
-  ✅ 4.2 Implement AgentsService (completed 3:12 PM)
+   4.1 Create Agent DTOs (completed 2:34 PM)
+   4.2 Implement AgentsService (completed 3:12 PM)
   ⬜ 4.3 Implement AgentsController (30 min)
   ⬜ 4.4 Testing & Validation (30 min)
 ```
@@ -494,10 +494,10 @@ Progress: 50% | Overall: 37.5%
 ### Phase 4 Complete!
 ```
 Progress: 100% | Overall: 50%
-  ✅ 4.1 Create Agent DTOs (completed 2:34 PM)
-  ✅ 4.2 Implement AgentsService (completed 3:12 PM)
-  ✅ 4.3 Implement AgentsController (completed 4:05 PM)
-  ✅ 4.4 Testing & Validation (completed 4:45 PM)
+   4.1 Create Agent DTOs (completed 2:34 PM)
+   4.2 Implement AgentsService (completed 3:12 PM)
+   4.3 Implement AgentsController (completed 4:05 PM)
+   4.4 Testing & Validation (completed 4:45 PM)
 ```
 
 When phase complete, overall progress updates: 37.5% → 50%!
@@ -559,11 +559,11 @@ cp .session-state.json .session-state-phase4.json
 ## 🎯 Summary
 
 **What you have:**
-- ✅ Real-time task tracking
-- ✅ Persistent state across sessions
-- ✅ Automatic progress calculation
-- ✅ CLI and interactive modes
-- ✅ Integration with session reminder
+-  Real-time task tracking
+-  Persistent state across sessions
+-  Automatic progress calculation
+-  CLI and interactive modes
+-  Integration with session reminder
 
 **How to use daily:**
 ```bash
@@ -582,7 +582,7 @@ node track-tasks.js complete 1
 **Benefits:**
 - 🎯 Always know where you are
 - 📊 See real progress (not estimates)
-- ✅ Visual confirmation of completion
+-  Visual confirmation of completion
 - 💾 State persists - never lose progress
 - 🚀 Stay motivated with visible progress
 

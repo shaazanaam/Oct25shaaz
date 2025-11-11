@@ -48,26 +48,26 @@ When you open VS Code or run the script, you'll see:
 
 📋 SESSION WORKFLOW REMINDER
 
-1. ✅ Open START_HERE.md (1 min)
-2. ✅ Run SESSION_CHECKLIST.md pre-checks (5 min)
-3. ✅ Review ROADMAP.md current phase (3 min)
-4. ✅ Follow PHASE_X_GUIDE.md step-by-step (while coding)
-5. ✅ Document decisions in DEV_SESSION_LOG.md (as you go)
-6. ✅ Run SESSION_CHECKLIST.md post-checks (10 min)
-7. ✅ Update ROADMAP.md and CHANGELOG.md (5 min)
-8. ✅ Commit and push to Git
+1.  Open START_HERE.md (1 min)
+2.  Run SESSION_CHECKLIST.md pre-checks (5 min)
+3.  Review ROADMAP.md current phase (3 min)
+4.  Follow PHASE_X_GUIDE.md step-by-step (while coding)
+5.  Document decisions in DEV_SESSION_LOG.md (as you go)
+6.  Run SESSION_CHECKLIST.md post-checks (10 min)
+7.  Update ROADMAP.md and CHANGELOG.md (5 min)
+8.  Commit and push to Git
 
 ════════════════════════════════════════════════════════════════
 
 🔍 Checking Prerequisites...
 
-✅ Docker is running
-✅ PostgreSQL container is running (port 5432)
-✅ Redis container is running (port 6379)
+ Docker is running
+ PostgreSQL container is running (port 5432)
+ Redis container is running (port 6379)
 
 📦 Git Status:
 📍 Current branch: main
-✅ Working directory is clean
+ Working directory is clean
 
 ════════════════════════════════════════════════════════════════
 
@@ -227,10 +227,10 @@ Add recurring calendar event at your usual coding time
 
 After 1 week of using reminders, ask yourself:
 
-- ✅ Am I following the workflow more consistently?
-- ✅ Am I forgetting fewer documentation updates?
-- ✅ Am I staying on the roadmap better?
-- ✅ Am I less likely to go off-plan?
+-  Am I following the workflow more consistently?
+-  Am I forgetting fewer documentation updates?
+-  Am I staying on the roadmap better?
+-  Am I less likely to go off-plan?
 
 If yes to most → Keep using!  
 If no → Try a different method above

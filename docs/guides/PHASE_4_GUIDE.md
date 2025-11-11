@@ -1,12 +1,12 @@
-# 🤖 Phase 4: Agent & Flow Management
+# Phase 4: Agent & Flow Management
 
 **Status:** Ready to Start  
-**Prerequisites:** Phase 3 Complete ✅  
+**Prerequisites:** Phase 3 Complete  
 **Estimated Time:** 2-3 hours
 
 ---
 
-## 🎯 **What You'll Build**
+## What You'll Build
 
 An **Agents module** that stores and manages LangGraph AI workflow definitions.
 
@@ -26,9 +26,9 @@ Agent: "IT Support Bot v1.0"
 
 ---
 
-## 📋 **What You'll Create**
+## What You'll Create
 
-### **Files to Build (6 files):**
+### Files to Build (6 files):
 
 ```
 src/agents/
@@ -43,7 +43,7 @@ src/agents/
 
 ---
 
-## 🗄️ **Database Schema (Already Exists)**
+## Database Schema (Already Exists)
 
 Your Prisma schema already has the Agent model:
 
@@ -71,9 +71,9 @@ enum AgentStatus {
 
 ---
 
-## 🔑 **Key Features to Implement**
+## Key Features to Implement
 
-### 1. **CRUD Operations**
+### 1. CRUD Operations
 - Create new agent workflow
 - List all agents for a tenant
 - Get single agent by ID
@@ -81,26 +81,26 @@ enum AgentStatus {
 - Change agent status (DRAFT → PUBLISHED)
 - Delete agent
 
-### 2. **Tenant Isolation**
+### 2. Tenant Isolation
 - Apply `TenantGuard` (like you did for Users)
 - Filter agents by `tenantId`
 - Each tenant sees only THEIR agents
 
-### 3. **Version Management**
+### 3. Version Management
 - Store version number (e.g., "1.0.0", "1.1.0")
 - Allow updating version when flow changes
 - Track when agents were last modified
 
-### 4. **Status Control**
+### 4. Status Control
 - DRAFT - Agent being built, not live
 - PUBLISHED - Active agent answering real users
 - DISABLED - Temporarily turned off
 
 ---
 
-## 📝 **Step-by-Step Plan**
+## Step-by-Step Plan
 
-### **Phase 4.1: Create DTOs** (20 min)
+### Phase 4.1: Create DTOs (20 min)
 
 #### File 1: `create-agent.dto.ts`
 **Validates:**
@@ -144,7 +144,7 @@ export class UpdateAgentStatusDto {
 
 ---
 
-### **Phase 4.2: Create Service** (30 min)
+### Phase 4.2: Create Service (30 min)
 
 #### File: `agents.service.ts`
 
@@ -193,7 +193,7 @@ async remove(id: string, tenantId: string) {
 
 ---
 
-### **Phase 4.3: Create Controller** (20 min)
+### Phase 4.3: Create Controller (20 min)
 
 #### File: `agents.controller.ts`
 
@@ -219,7 +219,7 @@ export class AgentsController {
 
 ---
 
-### **Phase 4.4: Create Module & Register** (10 min)
+### Phase 4.4: Create Module & Register (10 min)
 
 #### File: `agents.module.ts`
 ```typescript
@@ -242,7 +242,7 @@ imports: [
 
 ---
 
-## 🧪 **Testing Checklist**
+## Testing Checklist
 
 Once built, test in Swagger:
 
@@ -303,26 +303,26 @@ Body:
 
 ---
 
-## 🎯 **Success Criteria**
+## Success Criteria
 
 Phase 4 complete when:
-- ✅ Can create agents with LangGraph flows
-- ✅ Agents are tenant-scoped (isolation works)
-- ✅ Can change agent status (DRAFT → PUBLISHED)
-- ✅ Can update agent version and flow
-- ✅ Can delete agents
-- ✅ Swagger documentation complete
-- ✅ All endpoints protected by TenantGuard
+- Can create agents with LangGraph flows
+- Agents are tenant-scoped (isolation works)
+- Can change agent status (DRAFT → PUBLISHED)
+- Can update agent version and flow
+- Can delete agents
+- Swagger documentation complete
+- All endpoints protected by TenantGuard
 
 ---
 
-## 🚀 **What's Next**
+## What's Next
 
 After Phase 4, you'll have:
-- Multi-tenant platform ✅
-- Tenant management ✅
-- User management ✅
-- **Agent workflow storage** ✅
+- Multi-tenant platform
+- Tenant management
+- User management
+- **Agent workflow storage**
 
 **Phase 5** will add:
 - Conversations module (state management with Redis)
@@ -338,7 +338,7 @@ This lets you:
 
 ---
 
-## 💡 **Tips**
+## Tips
 
 1. **Start with DTOs** - Get validation right first
 2. **Service layer next** - Test database operations
@@ -355,4 +355,4 @@ This lets you:
 
 ---
 
-**Ready to start Phase 4?** Follow the same pattern you used for Tenants module! 🚀
+**Ready to start Phase 4?** Follow the same pattern you used for Tenants module!

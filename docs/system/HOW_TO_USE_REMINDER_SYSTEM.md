@@ -37,9 +37,9 @@ code ai-platform.code-workspace
 
 📋 SESSION WORKFLOW REMINDER
 
-1. ✅ Open START_HERE.md (1 min)
-2. ✅ Run SESSION_CHECKLIST.md pre-checks (5 min)
-3. ✅ Review ROADMAP.md current phase (3 min)
+1.  Open START_HERE.md (1 min)
+2.  Run SESSION_CHECKLIST.md pre-checks (5 min)
+3.  Review ROADMAP.md current phase (3 min)
 ... [full workflow displayed]
 ```
 
@@ -65,9 +65,9 @@ When you open `ai-platform.code-workspace`, the system:
 1. **Runs the startup script** (`start-session.bat`)
 2. **Shows the 8-step workflow** in terminal
 3. **Checks your environment:**
-   - ✅ Is Docker running?
-   - ✅ Are PostgreSQL and Redis containers up?
-   - ✅ What's your Git status?
+   -  Is Docker running?
+   -  Are PostgreSQL and Redis containers up?
+   -  What's your Git status?
 4. **Displays current phase** (Phase 4 - Agent & Flow Management)
 5. **Lists today's tasks** with time estimates
 6. **Offers to open documentation** files for you
@@ -221,7 +221,7 @@ cd c:\Users\600790\Oct25shaaz
 code ai-platform.code-workspace
 ```
 
-**Result:** Reminder appears automatically in terminal! ✅
+**Result:** Reminder appears automatically in terminal! 
 
 ---
 
@@ -325,7 +325,7 @@ node --version
 if %errorlevel% neq 0 (
     echo ❌ Node.js not found
 ) else (
-    echo ✅ Node.js installed
+    echo  Node.js installed
 )
 ```
 
@@ -350,10 +350,10 @@ chmod +x start-session.sh
 **Problem:** Workspace task not executing
 
 **Checklist:**
-1. ✅ Did you open **workspace file** (`code ai-platform.code-workspace`)?
+1.  Did you open **workspace file** (`code ai-platform.code-workspace`)?
    - NOT just the folder (`code .`)
-2. ✅ Did you trust the workspace when prompted?
-3. ✅ Is task auto-detect enabled?
+2.  Did you trust the workspace when prompted?
+3.  Is task auto-detect enabled?
    - `File > Preferences > Settings`
    - Search "task auto detect"
    - Should be "on"
@@ -512,11 +512,11 @@ git start  # Shows reminder
 
 **After 1 week, ask yourself:**
 
-- ✅ Did I check SESSION_CHECKLIST.md before coding? (Goal: 80%+)
-- ✅ Did I update ROADMAP.md after completing tasks? (Goal: 100%)
-- ✅ Did I document decisions in DEV_SESSION_LOG.md? (Goal: 80%+)
-- ✅ Did I commit work at end of session? (Goal: 100%)
-- ✅ Did I stay on the current phase (no skipping)? (Goal: 100%)
+-  Did I check SESSION_CHECKLIST.md before coding? (Goal: 80%+)
+-  Did I update ROADMAP.md after completing tasks? (Goal: 100%)
+-  Did I document decisions in DEV_SESSION_LOG.md? (Goal: 80%+)
+-  Did I commit work at end of session? (Goal: 100%)
+-  Did I stay on the current phase (no skipping)? (Goal: 100%)
 
 **If scoring low:** Try printable reminder or multiple methods
 
@@ -567,7 +567,7 @@ git start  # Shows reminder
 1. Close current VS Code window
 2. Run: `code ai-platform.code-workspace`
 3. Trust the workspace
-4. See the reminder appear! ✅
+4. See the reminder appear! 
 
 **This Week:**
 1. Use workspace file every day
@@ -615,8 +615,8 @@ The workspace is just the **easiest** option.
 ### Q: What if I work on multiple computers?
 
 **A:** 
-1. Scripts are committed to Git ✅
-2. Workspace file is committed ✅
+1. Scripts are committed to Git 
+2. Workspace file is committed 
 3. Just `git pull` on other computer
 4. Open workspace - works automatically!
 
@@ -634,13 +634,13 @@ No workspace = No auto-run = No reminder
 
 **What you have now:**
 
-✅ **Automatic reminder** every time you open workspace  
-✅ **Environment checks** (Docker, Git, Database)  
-✅ **Current phase visibility** (Phase 4)  
-✅ **Task list with time estimates**  
-✅ **Quick documentation access**  
-✅ **Printable backup** for your monitor  
-✅ **Complete customization** options
+ **Automatic reminder** every time you open workspace  
+ **Environment checks** (Docker, Git, Database)  
+ **Current phase visibility** (Phase 4)  
+ **Task list with time estimates**  
+ **Quick documentation access**  
+ **Printable backup** for your monitor  
+ **Complete customization** options
 
 **What to do now:**
 

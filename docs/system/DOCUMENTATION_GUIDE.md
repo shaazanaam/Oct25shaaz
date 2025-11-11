@@ -242,9 +242,9 @@ Task complete → Mark in ROADMAP.md → Add to CHANGELOG.md → Commit
    ✓ Click: "Run SESSION_CHECKLIST.md"
 
 2. Open SESSION_CHECKLIST.md
-   ✓ Pre-session: Docker running? ✅
-   ✓ Pre-session: Git pulled? ✅
-   ✓ Pre-session: Database up? ✅
+   ✓ Pre-session: Docker running? 
+   ✓ Pre-session: Git pulled? 
+   ✓ Pre-session: Database up? 
    ✓ Direction: Read ROADMAP.md Phase 4
 
 3. Open ROADMAP.md
@@ -262,7 +262,7 @@ Task complete → Mark in ROADMAP.md → Add to CHANGELOG.md → Commit
 5. Code create-agent.dto.ts
    ✓ Write code following guide
    ✓ Test with Swagger
-   ✓ Works! ✅
+   ✓ Works! 
 
 6. Document Decision
    ✓ Open DEV_SESSION_LOG.md
