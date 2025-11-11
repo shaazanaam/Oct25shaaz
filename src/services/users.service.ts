@@ -8,10 +8,8 @@ export class UsersService {
 
   async findAll(tenantId: string) {
     return this.prisma.user.findMany({
-      where: { tenantId }, // ← Filter by tenant
-      include: {
-        tenant: true, // Include tenant info in response
-      },
+      where: { tenantId },       // ← Filter by tenant
+      include: {tenant: true},   // Include tenant info in response
       orderBy: { createdAt: 'desc' },
     });
   }

@@ -1,0 +1,65 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "workbench.startupEditor": "readme",
+    "workbench.editorAssociations": {
+      "*.md": "default"
+    },
+    "window.title": "${dirty}${activeEditorShort}${separator}AI Platform - Phase 4 (37.5% Complete)",
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "task.autoDetect": "on",
+    "npm.enableRunFromFolder": true
+  },
+  "extensions": {
+    "recommendations": [
+      "prisma.prisma",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "humao.rest-client"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🚀 Start Session Reminder",
+        "type": "shell",
+        "command": "bash start-session.sh",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "dedicated"
+        },
+        "problemMatcher": [],
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug NestJS",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "start:debug"],
+        "console": "integratedTerminal",
+        "restart": true,
+        "skipFiles": ["<node_internals>/**"]
+      }
+    ]
+  }
+}

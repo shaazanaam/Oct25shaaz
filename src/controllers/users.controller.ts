@@ -15,7 +15,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'List of all users for this tenant' })
   @ApiResponse({ status: 400, description: 'X-Tenant-Id header missing' })
   @ApiResponse({ status: 403, description: 'Invalid tenant ID' })
-  async findAll(@Request() req) {
+  async findAll(@Request() req) {    // Access the request object
     return this.usersService.findAll(req.tenant.id);
   }
 

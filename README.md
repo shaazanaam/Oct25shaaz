@@ -10,6 +10,16 @@
 
 ---
 
+## 🚀 **New to This Project?**
+
+**Start here:** Run `.\start-session.bat` (Windows) or `./start-session.sh` (Mac/Linux) to see the development workflow reminder.
+
+Or open the workspace: `code ai-platform.code-workspace` for automatic reminders.
+
+See [`docs/guides/START_HERE.md`](docs/guides/START_HERE.md) for next steps.
+
+---
+
 ## 🌟 **What Makes This Special**
 
 This isn't just another CRUD API. This is a **complete AI platform architecture** designed for:
@@ -328,16 +338,18 @@ model Tool {
 
 ## 🛣️ **Development Roadmap**
 
-- [x] **Phase 1**: NestJS foundation, Docker, TypeScript
-- [x] **Phase 2**: Prisma schema with 7 models (Tenant, User, Agent, Tool, Conversation, Message, Document)
-- [x] **Phase 3.1**: TenantGuard for multi-tenant security
-- [x] **Phase 3.2**: Tenants CRUD module
-- [ ] **Phase 3.3**: Apply TenantGuard to all endpoints
-- [ ] **Phase 4**: Agents module (LangGraph flow management)
+- [x] **Phase 1**: NestJS foundation, Docker, TypeScript ✅
+- [x] **Phase 2**: Prisma schema with 7 models (Tenant, User, Agent, Tool, Conversation, Message, Document) ✅
+- [x] **Phase 3.1**: TenantGuard for multi-tenant security ✅
+- [x] **Phase 3.2**: Tenants CRUD module ✅
+- [x] **Phase 3.3**: Apply TenantGuard to all endpoints ✅
+- [ ] **Phase 4**: Agents module (LangGraph flow management) 🎯
 - [ ] **Phase 5**: Conversations module (Redis state management)
 - [ ] **Phase 6**: Tools module (KB search, ticketing integrations)
-- [ ] **Phase 7**: LLM Gateway (OpenAI/Ollama/HuggingFace routing)
+- [ ] **Phase 7**: Authentication & Authorization (JWT + RBAC)
 - [ ] **Phase 8**: LangGraph FastAPI service integration
+
+> **Current Status:** Phase 4 in progress. See `ROADMAP.md` for detailed progress tracking.
 
 ---
 
