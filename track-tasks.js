@@ -12,7 +12,7 @@ function loadState() {
     console.error('❌ State file not found. Run start-session first.');
     process.exit(1);
   }
-  return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+  return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));// this is wheere the file is being returned after being parsed
 }
 
 // Save state
@@ -61,6 +61,14 @@ function completeTask(state, taskIndex) {
   const completed = state.tasks.filter(t => t.status === 'completed').length;
   state.phaseProgress = Math.round((completed / state.tasks.length) * 100);
 
+  // Calculate overall progress (3 complete phases + current phase progress)
+  // Phases 1-3 are 100% complete, Phase 4 is current
+  const completedPhases = 3; // Phases 1, 2, 3
+  const currentPhaseContribution = state.phaseProgress / 100; // Phase 4 contribution
+  const totalPhases = 8; // Total project phases
+  state.overallProgress = ((completedPhases + currentPhaseContribution) / totalPhases) * 100;
+  state.overallProgress = Math.round(state.overallProgress * 1000) / 1000; // Round to 3 decimals
+
   saveState(state);
   console.log(`✅ Marked task ${task.id} as complete!`);
   console.log(`📊 Phase progress: ${state.phaseProgress}%\n`);
@@ -85,6 +93,17 @@ function startTask(state, taskIndex) {
   });
 
   task.status = 'in-progress';
+  
+  // Recalculate progress
+  const completed = state.tasks.filter(t => t.status === 'completed').length;
+  state.phaseProgress = Math.round((completed / state.tasks.length) * 100);
+  
+  const completedPhases = 3;
+  const currentPhaseContribution = state.phaseProgress / 100;
+  const totalPhases = 8;
+  state.overallProgress = ((completedPhases + currentPhaseContribution) / totalPhases) * 100;
+  state.overallProgress = Math.round(state.overallProgress * 1000) / 1000;
+  
   saveState(state);
   console.log(`🔄 Started task ${task.id}: ${task.name}`);
 }
@@ -147,7 +166,7 @@ async function interactiveMenu() {
 // CLI mode
 function cliMode() {
   const state = loadState();
-  const args = process.argv.slice(2);
+  const args = process.argv.slice(2); // the command ( list , start , complete, reset , interactive)
   const command = args[0];
 
   switch (command) {

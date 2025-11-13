@@ -4,6 +4,120 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [2025-11-13] - CRITICAL: Architecture Expanded to Full Stack (Path B)
+
+### BREAKING CHANGE: Roadmap Expansion
+
+**Major Decision:**
+- Expanded from 8-phase NestJS-only API to **11-phase full stack platform**
+- Adopted **Path B:** Complete 8-layer architecture with execution capabilities
+
+**Why:**
+- Original vision requires actual LangGraph workflow execution
+- NestJS alone = metadata API without AI (just storage, no execution)
+- LangGraph requires Python (FastAPI service needed)
+- Goal: Working KB→Ticket→Slack automation, not just CRUD API
+
+### New Architecture Overview
+
+**What NestJS Does (Control Plane - Layer 3):**
+- Store agent definitions (`flowJson` = LangGraph workflow JSON)
+- Manage tools, users, tenants, conversations, documents
+- Multi-tenant security (TenantGuard, JWT auth)
+- Orchestrate FastAPI execution
+- REST API for React frontend
+
+**What FastAPI Does (Execution Plane - Layer 4 - NEW!):**
+- Execute Python LangGraph workflows
+- Call MCP tool servers (KB search, ticketing, LLMs)
+- Stream conversation responses via SSE
+- Manage conversation state in Redis
+
+**What React Does (Frontend - Layer 1 - NEW!):**
+- Visual flow authoring UI (drag-and-drop LangGraph builder)
+- Chat interface for testing agents
+- Admin panel for managing tenants/users/tools
+
+### Roadmap Changes
+
+**Control Plane (NestJS - Phases 1-7):**
+- Phase 1-3: ✅ Complete (Foundation, Database, Multi-tenancy)
+- Phase 4: 🔄 25% (Agent Management - current)
+- Phase 5-7: ⏭️ Planned (Tools, Conversations, Documents)
+
+**Execution Plane (FastAPI/Python - NEW):**
+- Phase 8: LangGraph Execution Service (6-8 hours)
+- Phase 9: MCP Integration Layer (6-8 hours)
+
+**Frontend & Infrastructure (NEW):**
+- Phase 10: React Flow Authoring UI (8-10 hours)
+- Phase 11: Production Deployment (Kubernetes, Monitoring)
+
+**Progress Updated:**
+- Overall: 27.27% (3 of 11 phases)
+- Control Plane: 53.125% (3.25 of 7 phases)
+- Execution Plane: 0%
+- Frontend: 0%
+
+### Documentation Added
+
+**New Files:**
+- `docs/architecture/FULL_STACK_ARCHITECTURE.md`
+  - Complete 8-layer architecture explanation
+  - Technology stack for each layer
+  - End-to-end data flow examples
+  - Security model & multi-tenancy
+  - Why FastAPI + NestJS hybrid approach
+
+**Updated Files:**
+- `docs/guides/ROADMAP.md`
+  - Restructured with 11 phases
+  - Added FastAPI/Python phases
+  - Added React frontend phase
+  - Updated progress bars
+  - Clarified layer responsibilities
+
+- `DEV_SESSION_LOG.md`
+  - Documented architectural decision
+  - Explained Path A vs Path B choice
+  - Added technology stack table
+
+### Technology Stack Finalized
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| Control Plane | NestJS + TypeScript | CRUD API, security, orchestration |
+| Execution Plane | FastAPI + Python | LangGraph runtime, tool execution |
+| Database | PostgreSQL 16 | Relational data + JSONB for flows |
+| Cache | Redis 7 | Session state, conversation state |
+| Vector DB | Qdrant | Semantic search for KB |
+| Object Storage | MinIO | Document storage |
+| Frontend | React + TypeScript | Flow builder, chat UI, admin |
+| Auth | Keycloak | OAuth2, multi-tenancy |
+| Monitoring | Prometheus + Grafana | Metrics, dashboards |
+| Logging | ELK Stack | Centralized logs |
+
+### Next Steps
+
+**Immediate:** Finish Phase 4 (Agent Management)
+- 4.2: AgentsService (45 min)
+- 4.3: AgentsController (30 min)
+- 4.4: Testing (30 min)
+
+**Short-term:** Complete Control Plane (Phases 5-7)
+- Estimated: 12-15 hours
+- Milestone: Full NestJS REST API
+
+**Mid-term:** Build Execution Plane (Phases 8-9)
+- Estimated: 16 hours
+- Milestone: Working AI workflow execution
+
+**Long-term:** Frontend & Production (Phases 10-11)
+- Estimated: 18 hours
+- Milestone: Production-ready platform
+
+---
+
 ## [2025-11-11] - Phase 4.1 Complete: Agent DTOs Created
 
 ### Added - Phase 4.1: Agent DTOs

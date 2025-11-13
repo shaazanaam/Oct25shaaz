@@ -2,6 +2,212 @@
 
 ---
 
+## Session: November 13, 2025 - CRITICAL ARCHITECTURAL DECISION
+
+**Session Start:** November 13, 2025  
+**Decision:** EXPANDED TO PATH B - Full Stack Architecture  
+**Current Phase:** Phase 4 - Agent Management (25% complete)  
+**Impact:** Roadmap expanded from 8 to 11 phases
+
+### MAJOR ARCHITECTURAL SHIFT
+
+**Previous Plan (Path A):** NestJS-only metadata API  
+**New Plan (Path B):** Full 8-layer AI execution platform
+
+**Why the Change:**
+- User provided complete product vision (8-layer architecture)
+- Current NestJS work is only Layers 6-7 (Memory & Storage)
+- Missing critical Layer 4: Execution Plane (FastAPI + LangGraph)
+- Without execution plane, this is just an admin API, not an AI product
+
+### What This Means
+
+#### NestJS Backend Role (Control Plane - Layer 3)
+**Purpose:** Metadata management and orchestration
+- Store agent definitions (`flowJson` contains LangGraph workflow)
+- Manage tools, users, tenants, conversations, documents
+- Handle authentication (JWT) and multi-tenant isolation
+- Trigger FastAPI execution
+- Store conversation results
+- Provide REST API for React frontend
+
+**Analogy:** NestJS is the "control panel" that stores what agents should do
+
+#### FastAPI Backend Role (Execution Plane - Layer 4)
+**Purpose:** Actual workflow execution
+- Load agent `flowJson` from NestJS
+- Build and execute LangGraph StateGraph (Python only!)
+- Call tools via NestJS API (KB search, ticketing, LLMs)
+- Save conversation state to Redis
+- Stream responses to clients via SSE
+
+**Analogy:** FastAPI is the "engine" that actually runs the agents
+
+### New Roadmap Structure (11 Phases)
+
+**CONTROL PLANE (NestJS - Phases 1-7):**
+- ✅ Phase 1: Foundation (100% done)
+- ✅ Phase 2: Database Schema (100% done)
+- ✅ Phase 3: Multi-Tenancy (100% done)
+- 🔄 Phase 4: Agent Management (25% done - current)
+- ⏭️ Phase 5: Tool Management
+- ⏭️ Phase 6: Conversations API
+- ⏭️ Phase 7: Document Management
+
+**EXECUTION PLANE (FastAPI/Python - Phases 8-9):**
+- ⏭️ Phase 8: LangGraph Execution Service (NEW!)
+- ⏭️ Phase 9: MCP Integration Layer (NEW!)
+
+**FRONTEND & INFRA (React - Phases 10-11):**
+- ⏭️ Phase 10: React Flow Authoring UI (NEW!)
+- ⏭️ Phase 11: Production Deployment (NEW!)
+
+**Total Estimated Time:** ~60-80 hours (was ~20 hours)
+
+### Documentation Updates Made
+
+1. **ROADMAP.md**
+   - Complete rewrite with 11-phase structure
+   - Added architecture diagram
+   - Detailed FastAPI/Python phases
+   - Clarified NestJS vs FastAPI roles
+   - Updated progress tracking
+
+2. **FULL_STACK_ARCHITECTURE.md** (NEW)
+   - Complete 8-layer architecture explanation
+   - Technology stack for each layer
+   - End-to-end data flow example
+   - Security model
+   - Why this architecture decisions
+
+3. **DEV_SESSION_LOG.md** (this file)
+   - Documented architectural decision
+   - Explained Path A vs Path B choice
+
+### Current Status
+
+**What's Built (27.27% of 11 phases):**
+- ✅ NestJS API server with Swagger
+- ✅ PostgreSQL database with 7 models
+- ✅ Multi-tenant isolation (TenantGuard)
+- ✅ Tenants CRUD module
+- ✅ Users CRUD module (refactored to module-based)
+- ✅ Agent DTOs (Phase 4.1)
+- ✅ Docker Compose (PostgreSQL + Redis)
+
+**What's Missing (72.73%):**
+- ❌ Agent service/controller (Phase 4.2-4.4)
+- ❌ Tool management (Phase 5)
+- ❌ Conversations API (Phase 6)
+- ❌ Document management (Phase 7)
+- ❌ **CRITICAL:** FastAPI LangGraph service (Phase 8)
+- ❌ MCP integration microservices (Phase 9)
+- ❌ React flow authoring UI (Phase 10)
+- ❌ Production deployment (Phase 11)
+
+### Next Immediate Steps
+
+**Continue Phase 4:** Finish Agent Management
+1. Phase 4.2: Implement `AgentsService` (45 min)
+2. Phase 4.3: Implement `AgentsController` (30 min)
+3. Phase 4.4: Testing & Validation (30 min)
+
+**Then:** Complete Control Plane (Phases 5-7)
+- Estimated: ~12-15 hours
+- Milestone: Full NestJS REST API ready
+
+**Then:** Build Execution Plane (Phases 8-9)
+- Estimated: ~16 hours
+- Milestone: Working KB→Ticket flow execution
+
+### Key Architectural Decisions
+
+**Q: Should we build just the NestJS API (Path A) or full stack (Path B)?**  
+**Decision:** Path B - Full stack with FastAPI execution  
+**Reasoning:**
+- User's vision requires actual AI workflow execution
+- LangGraph only works in Python
+- NestJS alone = metadata API without the actual AI
+- Path B creates a real product, not just admin backend
+
+**Q: Why not just use NestJS for everything?**  
+**Decision:** Need Python for LangGraph execution  
+**Reasoning:**
+- LangGraph library is Python-only
+- LangChain ecosystem is primarily Python
+- FastAPI is perfect for Python microservices
+- NestJS excels at CRUD/metadata management
+
+**Q: Won't this make the project too complex?**  
+**Decision:** Complexity is necessary for the vision  
+**Reasoning:**
+- User wants KB→Ticket→Slack automation
+- This requires workflow execution (LangGraph)
+- LangGraph requires Python service
+- Alternative is building simpler product (rejected)
+
+### Technology Stack Finalized
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| Control Plane | NestJS + TypeScript | Metadata CRUD, security |
+| Execution Plane | FastAPI + Python | LangGraph workflows |
+| Database | PostgreSQL 16 | Relational data + JSONB |
+| Cache/State | Redis 7 | Sessions, conversation state |
+| Vector DB | Qdrant | Semantic search |
+| Object Storage | MinIO | Documents, templates |
+| Auth | Keycloak | OAuth2, multi-tenancy |
+| Frontend | React + TypeScript | Flow builder, chat UI |
+| Monitoring | Prometheus + Grafana | Metrics |
+| Logging | ELK Stack | Centralized logs |
+
+### End-to-End Flow Example
+
+**User asks question → KB lookup fails → Create ticket:**
+
+```
+1. User: "How do I reset password?" 
+   → React UI → POST /conversations/:id/messages
+
+2. NestJS Control Plane
+   → Saves message to PostgreSQL
+   → Calls FastAPI: POST /execute
+   → Body: { agentId, conversationId, message }
+
+3. FastAPI Execution Plane
+   → Loads agent flowJson from NestJS
+   → Builds LangGraph StateGraph
+   → Executes nodes:
+   
+   a) KB Lookup Node
+      → Calls NestJS POST /tools/{kb_id}/execute
+      → NestJS calls MCP KB Service
+      → Qdrant returns docs
+   
+   b) LLM Evaluation Node
+      → Determines KB didn't help
+   
+   c) Ticket Creation Node
+      → Calls NestJS POST /tools/{ticket_id}/execute
+      → NestJS calls MCP Ticketing Service
+      → Zammad creates ticket #12345
+   
+   d) Slack Notification Node
+      → Calls MCP Notifications Service
+      → Posts to #support channel
+
+4. FastAPI saves state to Redis
+   → Key: conversation:{id}:state
+
+5. FastAPI calls NestJS
+   → POST /conversations/:id/messages
+   → Saves assistant response
+
+6. User sees: "Created ticket #12345"
+```
+
+---
+
 ## Session: November 11, 2025 - Phase 4.1: Agent DTOs
 
 **Session Start:** November 11, 2025  
