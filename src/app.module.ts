@@ -5,6 +5,7 @@ import { PrismaService } from "./services/prisma.service";
 import { TenantsModule } from "./tenants/tenants.module";
 import { UsersModule } from "./users/users.module";
 import { AgentsModule } from "./agents/agents.module";
+import { ToolsModule } from "./tools/tools.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AgentsModule } from "./agents/agents.module";
     TenantsModule, // ← Tenants CRUD module (Phase 3.2)
     UsersModule, // ← Users CRUD module (Phase 3.3)
     AgentsModule, // ← Agents CRUD module (Phase 4)
+    ToolsModule, // ← Tools CRUD module (Phase 5)
   ],
   controllers: [AppController], //HTTP route handlers
   providers: [PrismaService], // business login, service utilities and database connection
