@@ -2,11 +2,122 @@
 
 ---
 
+## Session: November 13, 2025 - Phase 4 Complete + Testing Infrastructure
+
+**Session Start:** November 13, 2025  
+**Session Focus:** Complete Agent Management CRUD and automated testing  
+**Phase Completed:** Phase 4 - Agent Management (100%)  
+**Overall Progress:** 36.36% (4 of 11 phases complete)
+
+### Work Completed
+
+#### 1. AgentsService Implementation
+Created `src/agents/agents.service.ts` with 6 methods:
+- `create()` - Creates agents with duplicate name detection (Prisma P2002 error handling)
+- `findAll(tenantId)` - Lists agents with `_count.conversations` aggregation
+- `findOne(id, tenantId)` - Retrieves single agent with ownership validation
+- `update(id, tenantId, dto)` - Updates agent with conflict detection
+- `updateStatus(id, tenantId, status)` - Type-safe status changes (DRAFT/PUBLISHED/DISABLED)
+- `remove(id, tenantId)` - Deletes agent with conversation existence check
+
+**Technical Fixes:**
+- Fixed PrismaService import path (from `../services/` not `../modules/`)
+- Changed `updateStatus` parameter from `string` to union type `'DRAFT' | 'PUBLISHED' | 'DISABLED'`
+- Removed non-existent `Conversation.status` field check (schema only has `state` JSON field)
+- All TypeScript compilation errors resolved
+
+#### 2. AgentsController Implementation
+Created `src/agents/agents.controller.ts` with 6 endpoints:
+- POST /agents - Create agent (requires X-Tenant-Id header)
+- GET /agents - List all agents (tenant-scoped via TenantGuard)
+- GET /agents/:id - Get single agent
+- PATCH /agents/:id - Update agent fields
+- PATCH /agents/:id/status - Update status only
+- DELETE /agents/:id - Delete agent
+
+**Features:**
+- Full Swagger/OpenAPI documentation
+- TenantGuard applied at controller level
+- Proper HTTP status codes (201, 200, 400, 403, 404, 409)
+- Type assertion for status parameter to satisfy TypeScript strict mode
+
+#### 3. Testing Infrastructure
+Created comprehensive testing setup:
+- `test/test-agents.sh` - Automated bash script with 10 test scenarios
+- `test/README.md` - Testing documentation and usage guide
+- `.vscode/tasks.json` - Added "Test Agent Endpoints" VS Code task
+- Updated `.gitignore` - Allow tasks.json while ignoring personal settings
+
+**Test Coverage:**
+1. Server health check
+2. Create tenant with unique timestamp
+3. Create agent with proper flowJson structure (nodes/edges)
+4. List all agents with X-Tenant-Id header
+5. Get single agent by ID
+6. Update agent status (DRAFT to PUBLISHED)
+7. Update agent name and version
+8. Tenant isolation security test (verify 404 from wrong tenant)
+9. Delete agent
+10. Verify deletion (confirm 404 after delete)
+
+**Test Results:** All tests passing, tenant isolation working correctly
+
+#### 4. Documentation Updates
+- Updated `docs/guides/ROADMAP.md`:
+  - Phase 4 marked as 100% complete
+  - Overall progress updated to 36.36%
+  - Added detailed Phase 4 deliverables and validation criteria
+  - Added key decisions and error handling notes
+  
+- Updated `CHANGELOG.md`:
+  - Added Phase 4 completion entry
+  - Documented all new files and endpoints
+  - Listed technical details and validation results
+
+### Key Decisions Made
+
+1. **flowJson Structure:** Nodes array with `{id, type}`, edges array with `{from, to}`
+2. **Status Workflow:** DRAFT (development) → PUBLISHED (production) → DISABLED (archived)
+3. **Conversation Protection:** Block deletion if agent has conversations (data integrity)
+4. **Testing Strategy:** Automated bash script over manual Swagger testing (repeatability)
+5. **Unique Tenant Names:** Use timestamp to avoid conflicts in test runs
+6. **VS Code Tasks:** Share tasks.json in Git for team consistency
+
+### Files Modified/Created
+
+**New Files:**
+- `src/agents/agents.service.ts`
+- `src/agents/agents.controller.ts`
+- `src/agents/agents.module.ts`
+- `test/test-agents.sh`
+- `test/README.md`
+
+**Modified Files:**
+- `src/app.module.ts` - Registered AgentsModule
+- `.vscode/tasks.json` - Added test task
+- `.gitignore` - Updated to allow tasks.json
+- `docs/guides/ROADMAP.md` - Phase 4 completion
+- `CHANGELOG.md` - Added Phase 4 entry
+- `DEV_SESSION_LOG.md` - This entry
+
+### Next Steps
+
+**Phase 5: Tool Management (3-4 hours)**
+- Create Tools CRUD module
+- Implement tool types (KB_SEARCH, TICKET_CREATE, SLACK_POST, etc.)
+- Secure API key storage with encryption
+- Dynamic schema validation
+- Tool testing endpoint
+
+**Estimated Completion:** November 14, 2025
+
+---
+
 ## Session: November 13, 2025 - CRITICAL ARCHITECTURAL DECISION
 
 **Session Start:** November 13, 2025  
 **Decision:** EXPANDED TO PATH B - Full Stack Architecture  
-**Current Phase:** Phase 4 - Agent Management (25% complete)  
+**Current Phase:** Phase 4 - Agent Management (25% complete at time)  
 **Impact:** Roadmap expanded from 8 to 11 phases
 
 ### MAJOR ARCHITECTURAL SHIFT
@@ -24,7 +135,7 @@
 
 #### NestJS Backend Role (Control Plane - Layer 3)
 **Purpose:** Metadata management and orchestration
-- Store agent definitions (`flowJson` contains LangGraph workflow)
+- Store agent definitions (flowJson contains LangGraph workflow)
 - Manage tools, users, tenants, conversations, documents
 - Handle authentication (JWT) and multi-tenant isolation
 - Trigger FastAPI execution
@@ -35,7 +146,7 @@
 
 #### FastAPI Backend Role (Execution Plane - Layer 4)
 **Purpose:** Actual workflow execution
-- Load agent `flowJson` from NestJS
+- Load agent flowJson from NestJS
 - Build and execute LangGraph StateGraph (Python only!)
 - Call tools via NestJS API (KB search, ticketing, LLMs)
 - Save conversation state to Redis
@@ -46,8 +157,8 @@
 ### New Roadmap Structure (11 Phases)
 
 **CONTROL PLANE (NestJS - Phases 1-7):**
-- ✅ Phase 1: Foundation (100% done)
-- ✅ Phase 2: Database Schema (100% done)
+- Phase 1: Foundation (100% done)
+- Phase 2: Database Schema (100% done)
 - ✅ Phase 3: Multi-Tenancy (100% done)
 - 🔄 Phase 4: Agent Management (25% done - current)
 - ⏭️ Phase 5: Tool Management

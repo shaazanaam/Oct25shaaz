@@ -4,6 +4,53 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [2025-11-13] - Phase 4 Complete: Agent Management CRUD
+
+### Added
+- **AgentsService** with 6 methods:
+  - `create()` - Create agent with duplicate name detection (P2002 error handling)
+  - `findAll()` - List agents with conversation counts
+  - `findOne()` - Get agent with ownership validation
+  - `update()` - Update agent with conflict detection
+  - `updateStatus()` - Change agent status (DRAFT/PUBLISHED/DISABLED)
+  - `remove()` - Delete agent with conversation check protection
+  
+- **AgentsController** with 6 REST endpoints:
+  - POST /agents - Create agent
+  - GET /agents - List all agents (tenant-scoped)
+  - GET /agents/:id - Get single agent
+  - PATCH /agents/:id - Update agent
+  - PATCH /agents/:id/status - Update status only
+  - DELETE /agents/:id - Delete agent
+  
+- **Testing Infrastructure:**
+  - `test/test-agents.sh` - Automated bash test script
+  - `test/README.md` - Testing documentation
+  - `.vscode/tasks.json` - Added VS Code task for running tests
+  - 10 automated test scenarios including tenant isolation security
+
+- **AgentsModule** registered in AppModule
+
+### Changed
+- Updated `.gitignore` to allow `.vscode/tasks.json` (team-shared) while ignoring personal settings
+- Updated ROADMAP.md progress: Phase 4 now 100% complete (36.36% overall)
+
+### Validated
+- All 6 Agent endpoints working with proper HTTP status codes
+- Tenant isolation security (404 for cross-tenant access)
+- Duplicate name detection (409 Conflict)
+- Conversation protection on deletion
+- Status transitions (DRAFT to PUBLISHED)
+- flowJson structure validation (nodes and edges arrays)
+
+### Technical Details
+- TypeScript compilation: 0 errors
+- Error handling: P2002 (duplicate), P2025 (not found), custom NotFoundException
+- Security: TenantGuard applied at controller level
+- Documentation: Full Swagger/OpenAPI annotations
+
+---
+
 ## [2025-11-13] - CRITICAL: Architecture Expanded to Full Stack (Path B)
 
 ### BREAKING CHANGE: Roadmap Expansion
@@ -16,12 +63,12 @@ All notable changes to this project will be documented in this file.
 - Original vision requires actual LangGraph workflow execution
 - NestJS alone = metadata API without AI (just storage, no execution)
 - LangGraph requires Python (FastAPI service needed)
-- Goal: Working KB→Ticket→Slack automation, not just CRUD API
+- Goal: Working KB to Ticket to Slack automation, not just CRUD API
 
 ### New Architecture Overview
 
 **What NestJS Does (Control Plane - Layer 3):**
-- Store agent definitions (`flowJson` = LangGraph workflow JSON)
+- Store agent definitions (flowJson = LangGraph workflow JSON)
 - Manage tools, users, tenants, conversations, documents
 - Multi-tenant security (TenantGuard, JWT auth)
 - Orchestrate FastAPI execution
@@ -41,9 +88,9 @@ All notable changes to this project will be documented in this file.
 ### Roadmap Changes
 
 **Control Plane (NestJS - Phases 1-7):**
-- Phase 1-3: ✅ Complete (Foundation, Database, Multi-tenancy)
-- Phase 4: 🔄 25% (Agent Management - current)
-- Phase 5-7: ⏭️ Planned (Tools, Conversations, Documents)
+- Phase 1-3: Complete (Foundation, Database, Multi-tenancy)
+- Phase 4: Complete (Agent Management)
+- Phase 5-7: Planned (Tools, Conversations, Documents)
 
 **Execution Plane (FastAPI/Python - NEW):**
 - Phase 8: LangGraph Execution Service (6-8 hours)

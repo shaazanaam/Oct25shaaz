@@ -9,8 +9,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Optional: IDE settings
-.vscode/
+# Optional: IDE settings (keep tasks.json for team, ignore personal settings)
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .DS_Store
 
 /src/generated/prisma
+
+# Chat session logs (private conversations)
+docs/sessions/

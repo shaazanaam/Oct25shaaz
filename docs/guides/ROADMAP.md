@@ -4,12 +4,12 @@
 **Architecture:** 8-Layer Full Stack (NestJS Control Plane + FastAPI Execution Plane)  
 **Started:** November 5, 2025  
 **Last Updated:** November 13, 2025  
-**Current Phase:** Phase 4 - Agent Management (Control Plane)  
+**Current Phase:** Phase 5 - Tool Management (Control Plane)  
 **Path:** B - Full Production Platform with LangGraph Execution
 
 ---
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 This project implements an **8-layer multi-tenant AI platform**:
 
@@ -63,8 +63,8 @@ CONTROL PLANE (NestJS):
 Phase 1: ████████████████████ 100%  Complete  Foundation
 Phase 2: ████████████████████ 100%  Complete  Database Schema
 Phase 3: ████████████████████ 100%  Complete  Multi-Tenancy
-Phase 4: █████░░░░░░░░░░░░░░░  25%  Current   Agent Management
-Phase 5: ░░░░░░░░░░░░░░░░░░░░   0%  Planned   Tool Management
+Phase 4: ████████████████████ 100%  Complete  Agent Management
+Phase 5: ░░░░░░░░░░░░░░░░░░░░   0%  Current   Tool Management
 Phase 6: ░░░░░░░░░░░░░░░░░░░░   0%  Planned   Conversation API
 Phase 7: ░░░░░░░░░░░░░░░░░░░░   0%  Planned   Document Management
 
@@ -77,8 +77,8 @@ Phase 10: ░░░░░░░░░░░░░░░░░░░  0%  Planned
 Phase 11: ░░░░░░░░░░░░░░░░░░░  0%  Planned   Production Deployment
 ```
 
-**Overall Progress:** 27.27% (3 of 11 phases complete)  
-**Control Plane Progress:** 53.125% (3.25 of 7 phases)  
+**Overall Progress:** 36.36% (4 of 11 phases complete)  
+**Control Plane Progress:** 57.14% (4 of 7 phases)  
 **Execution Plane Progress:** 0% (0 of 2 phases)  
 **Frontend Progress:** 0% (0 of 2 phases)
 
@@ -234,20 +234,20 @@ GET    /users/:id      - Get user by ID
 ---
 
 ## Phase 4: Agent & Flow Management
-**Status:** In Progress (25% complete)
+**Status:** Complete
 **Started:** November 11, 2025  
-**Target Completion:** November 12, 2025  
-**Estimated Time:** 2-3 hours
+**Completed:** November 13, 2025  
+**Time Spent:** 3 hours
 
 ### Goals
 - [x] Create Agent DTOs (Phase 4.1)
-- [ ] Implement AgentsService (Phase 4.2)
-- [ ] Implement AgentsController (Phase 4.3)
-- [ ] Testing & Validation (Phase 4.4)
+- [x] Implement AgentsService (Phase 4.2)
+- [x] Implement AgentsController (Phase 4.3)
+- [x] Testing & Validation (Phase 4.4)
 
 ### Tasks Breakdown
 
-#### Phase 4.1: Create Agent DTOs (COMPLETED)
+#### Phase 4.1: Create Agent DTOs
 **Time Spent:** 30 minutes  
 **Completed:** November 11, 2025
 
@@ -255,92 +255,86 @@ GET    /users/:id      - Get user by ID
 - [x] `src/agents/dto/update-agent.dto.ts` - PartialType for flexible updates
 - [x] `src/agents/dto/update-agent-status.dto.ts` - Status enum validation
 
-#### Phase 4.2: Implement AgentsService (NEXT)
-**Estimated Time:** 45 minutes  
-**Status:** Not started
+#### Phase 4.2: Implement AgentsService
+**Time Spent:** 1.5 hours  
+**Completed:** November 13, 2025
 
-Methods to implement:
-- `create()` - Create new agent with duplicate name detection
-- `findAll(tenantId)` - List all agents for tenant with conversation counts
-- `findOne(id, tenantId)` - Get single agent with ownership validation
-- `update(id, tenantId, dto)` - Update agent with conflict detection  
-- `updateStatus(id, tenantId, status)` - Change agent status with validation
-- `remove(id, tenantId)` - Delete agent (check for active conversations)
+Methods implemented:
+- [x] `create()` - Create new agent with duplicate name detection (P2002 error)
+- [x] `findAll(tenantId)` - List all agents for tenant with _count.conversations
+- [x] `findOne(id, tenantId)` - Get single agent with ownership validation
+- [x] `update(id, tenantId, dto)` - Update agent with conflict detection  
+- [x] `updateStatus(id, tenantId, status)` - Change agent status (DRAFT/PUBLISHED/DISABLED)
+- [x] `remove(id, tenantId)` - Delete agent (prevents deletion if conversations exist)
 
-#### Phase 4.3: Implement AgentsController (PENDING)
-**Estimated Time:** 30 minutes
+#### Phase 4.3: Implement AgentsController
+**Time Spent:** 45 minutes  
+**Completed:** November 13, 2025
 
-Endpoints to create:
-- POST /agents
-- GET /agents  
-- GET /agents/:id
-- PATCH /agents/:id
-- PATCH /agents/:id/status
-- DELETE /agents/:id
+Endpoints created:
+- [x] POST /agents - Create agent (requires X-Tenant-Id header)
+- [x] GET /agents - List agents (tenant-scoped via TenantGuard)
+- [x] GET /agents/:id - Get single agent
+- [x] PATCH /agents/:id - Update agent
+- [x] PATCH /agents/:id/status - Update status only
+- [x] DELETE /agents/:id - Delete agent
 
-#### Phase 4.4: Testing & Validation (PENDING)
-**Estimated Time:** 30 minutes
+#### Phase 4.4: Testing & Validation
+**Time Spent:** 45 minutes  
+**Completed:** November 13, 2025
+
+- [x] Created automated test script `test/test-agents.sh`
+- [x] Added VS Code task for running tests
+- [x] Validated all 6 endpoints with proper HTTP status codes
+- [x] Verified tenant isolation (404 for cross-tenant access)
+- [x] Tested duplicate name detection (409 conflict)
+- [x] Confirmed conversation count check on deletion
+- [x] Verified status transitions (DRAFT to PUBLISHED)
 
 ### Deliverables Created
 - [x] `src/agents/dto/create-agent.dto.ts`
 - [x] `src/agents/dto/update-agent.dto.ts`
 - [x] `src/agents/dto/update-agent-status.dto.ts`
-- [ ] `src/agents/agents.service.ts`
-- [ ] `src/agents/agents.controller.ts`
-- [ ] `src/agents/agents.module.ts`
+- [x] `src/agents/agents.service.ts` - 6 methods, full error handling
+- [x] `src/agents/agents.controller.ts` - 6 endpoints with Swagger docs
+- [x] `src/agents/agents.module.ts` - Module registration
+- [x] `test/test-agents.sh` - Automated test script
+- [x] `test/README.md` - Testing documentation
+- [x] `.vscode/tasks.json` - Added test task
 
-### API Endpoints to Build
+### API Endpoints Built
 ```
 POST   /agents              - Create new agent workflow
 GET    /agents              - List all agents (tenant-scoped)
 GET    /agents/:id          - Get agent by ID
 PATCH  /agents/:id          - Update agent (name, version, flowJson)
-PATCH  /agents/:id/status   - Change status (DRAFT → PUBLISHED)
-DELETE /agents/:id          - Delete agent
+PATCH  /agents/:id/status   - Change status (DRAFT/PUBLISHED/DISABLED)
+DELETE /agents/:id          - Delete agent (blocks if conversations exist)
 ```
 
-### Tasks Breakdown
-- [ ] 4.1: Create DTOs with validation (30 min)
-  - [ ] CreateAgentDto (name, version, flowJson, tenantId)
-  - [ ] UpdateAgentDto (partial updates)
-  - [ ] UpdateAgentStatusDto (status enum validation)
-- [ ] 4.2: Implement AgentsService (45 min)
-  - [ ] create() - Create agent with duplicate name check
-  - [ ] findAll() - List agents for tenant
-  - [ ] findOne() - Get single agent
-  - [ ] update() - Update agent fields
-  - [ ] updateStatus() - Change agent status
-  - [ ] remove() - Delete agent
-- [ ] 4.3: Implement AgentsController (30 min)
-  - [ ] Apply @UseGuards(TenantGuard)
-  - [ ] Map all CRUD endpoints
-  - [ ] Add Swagger documentation
-- [ ] 4.4: Testing & Validation (30 min)
-  - [ ] Create test agent with LangGraph flow
-  - [ ] Test status transitions
-  - [ ] Verify tenant isolation
-  - [ ] Test version management
+### Validation Criteria
+- [x] Can create agent via POST /agents
+- [x] Agent requires X-Tenant-Id header (400 if missing)
+- [x] Duplicate agent name returns 409 Conflict
+- [x] flowJson validates with nodes and edges arrays
+- [x] Status enum validates (DRAFT/PUBLISHED/DISABLED)
+- [x] Tenant isolation: Agent A cannot access Tenant B's agents (404)
+- [x] Cannot delete agent with existing conversations
+- [x] List agents includes conversation count (_count.conversations)
+- [x] Update agent handles partial updates correctly
+- [x] Status transitions work (DRAFT to PUBLISHED)
 
-### Key Design Decisions
-- **flowJson as Json type:** Prisma JSONB for flexible workflow storage
-- **Version as string:** Supports semantic versioning (e.g., "1.2.3")
-- **Status enum:** Explicit states prevent invalid workflows from running
-- **Tenant scoping:** Use TenantGuard like Users module
-
-### Success Criteria
-- [ ] Can create agent with LangGraph JSON
-- [ ] Agent status transitions work (DRAFT → PUBLISHED → DISABLED)
-- [ ] Version field updates correctly
-- [ ] Tenant A cannot access Tenant B's agents
-- [ ] flowJson validates as proper JSON object
-- [ ] Swagger docs show all endpoints
-
-### Reference Guide
-See: `PHASE_4_GUIDE.md` for detailed implementation steps
+### Key Decisions
+- **flowJson Structure:** Stores LangGraph workflow as JSON with nodes (id, type) and edges (from, to)
+- **Status Workflow:** DRAFT (editing) to PUBLISHED (production) to DISABLED (archived)
+- **Conversation Protection:** Cannot delete agents with active conversations (data integrity)
+- **Tenant Guard:** Applied at controller level for automatic multi-tenant filtering
+- **Error Handling:** P2002 for duplicates, P2025 for not found, custom NotFoundException for ownership
+- **Testing Strategy:** Automated bash script with 10 test scenarios including security validation
 
 ---
 
-##  Phase 5: Tool Management & Configuration
+## Phase 5: Tool Management & Configuration
 **Status:** Planned  
 **Layer:** Control Plane (NestJS)  
 **Target Start:** November 14, 2025  

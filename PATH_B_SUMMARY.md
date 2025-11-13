@@ -8,7 +8,7 @@
 
 ## What You Asked For
 
-You provided a complete product vision with **8 architectural layers**:
+This is the complete vision for the 8 layer stacks
 
 1. **Frontend:** React flow authoring + chat UI
 2. **Proxy:** Nginx/Traefik for routing
