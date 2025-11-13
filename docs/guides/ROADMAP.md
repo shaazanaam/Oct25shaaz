@@ -54,6 +54,71 @@ This project implements an **8-layer multi-tenant AI platform**:
 - **Streaming:** Real-time conversation responses via SSE
 - **State Management:** Load/save conversation state to Redis
 
+### End-to-End Data Flow Example
+
+**Scenario:** User asks question → KB lookup → Create ticket
+
+```
+1. User types "How do I reset my password?" in chat UI
+   
+2. React Frontend → POST /conversations/:id/messages
+
+3. NestJS Control Plane
+   → Saves message to PostgreSQL
+   → Calls FastAPI: POST /execute { agentId, conversationId, message }
+   
+4. FastAPI Execution Plane
+   → Loads agent flowJson from NestJS
+   → Executes LangGraph workflow:
+      a) KB Lookup Node → Calls MCP KB Search → Qdrant returns top 3 docs
+      b) Feedback Check → LLM determines KB didn't help
+      c) Ticket Creation → Calls MCP Ticketing → Zammad creates ticket #12345
+      d) Slack Notification → Posts to #support channel
+   
+5. FastAPI saves state to Redis (conversation:{id}:state)
+   
+6. FastAPI calls NestJS to save assistant response
+   
+7. User sees: "I created ticket #12345 for you."
+```
+
+### Technology Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Frontend | React + TypeScript + Vite | Flow builder, chat UI, admin |
+| Proxy | Nginx/Traefik | Routing, SSL, load balancing |
+| Control Plane | NestJS + TypeScript | Metadata CRUD, security |
+| Execution Plane | FastAPI + Python | LangGraph runtime |
+| Event Layer | Kafka/RabbitMQ | Event streaming, webhooks |
+| Integration | FastAPI microservices | MCP servers for tools |
+| Database | PostgreSQL 16 | Relational data, JSONB |
+| Cache | Redis 7 | Sessions, state, cache |
+| Object Storage | MinIO | Documents, templates |
+| Vector DB | Qdrant | Semantic search |
+| Version Control | Gitea | Flow versioning |
+| Auth | Keycloak | OAuth2, multi-tenancy |
+| Monitoring | Prometheus + Grafana | Metrics, dashboards |
+| Logging | ELK Stack | Centralized logs |
+
+### Security & Multi-Tenancy
+
+**Authentication Flow:**
+1. User logs in → Keycloak issues JWT (contains userId, tenantId, roles)
+2. React stores JWT in httpOnly cookie
+3. Every API call includes JWT in Authorization header
+4. NestJS validates JWT and extracts tenantId
+5. TenantGuard ensures user belongs to tenant
+6. All queries filtered by tenantId
+
+**Tenant Isolation:**
+- **Database:** WHERE tenantId = :tenantId on ALL queries
+- **Redis:** Keys prefixed with tenant:{tenantId}:*
+- **Qdrant:** Separate collections per tenant
+- **MinIO:** Buckets per tenant
+- **MCP:** Tenant ID required for all tool calls
+- **Secrets:** API keys encrypted with AES-256
+
 ---
 
 ## Progress Overview
