@@ -2,12 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 Start Session Reminder",
+      "label": "Start Session Reminder",
       "type": "shell",
       "command": "bash start-session.sh",
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -15,7 +12,7 @@
       "problemMatcher": []
     },
     {
-      "label": "🧪 Test Agent Endpoints",
+      "label": "Test Agent Endpoints",
       "type": "shell",
       "command": "bash test/test-agents.sh",
       "presentation": {
@@ -25,7 +22,7 @@
       "problemMatcher": []
     },
     {
-      "label": "🚀 Start Dev Server",
+      "label": "Start Dev Server",
       "type": "shell",
       "command": "npm run start:dev",
       "isBackground": true,
