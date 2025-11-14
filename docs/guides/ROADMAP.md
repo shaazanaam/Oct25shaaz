@@ -9,7 +9,7 @@
 
 ---
 
-##  Architecture Overview
+## Architecture Overview
 
 This project implements an **8-layer multi-tenant AI platform**:
 
@@ -42,6 +42,7 @@ This project implements an **8-layer multi-tenant AI platform**:
 ```
 
 ### What NestJS Backend Does (Control Plane)
+
 - **Metadata Management:** Store agent definitions, tool configs, user accounts
 - **CRUD Operations:** REST API for managing all entities
 - **Security:** Multi-tenant isolation, JWT authentication, RBAC
@@ -49,6 +50,7 @@ This project implements an **8-layer multi-tenant AI platform**:
 - **Admin Panel Backend:** Powers the management UI
 
 ### What FastAPI Backend Does (Execution Plane)
+
 - **LangGraph Runtime:** Execute Python workflows stored as `flowJson`
 - **Tool Execution:** Call MCP servers (KB search, ticketing, LLMs)
 - **Streaming:** Real-time conversation responses via SSE
@@ -60,13 +62,13 @@ This project implements an **8-layer multi-tenant AI platform**:
 
 ```
 1. User types "How do I reset my password?" in chat UI
-   
+
 2. React Frontend → POST /conversations/:id/messages
 
 3. NestJS Control Plane
    → Saves message to PostgreSQL
    → Calls FastAPI: POST /execute { agentId, conversationId, message }
-   
+
 4. FastAPI Execution Plane
    → Loads agent flowJson from NestJS
    → Executes LangGraph workflow:
@@ -74,36 +76,37 @@ This project implements an **8-layer multi-tenant AI platform**:
       b) Feedback Check → LLM determines KB didn't help
       c) Ticket Creation → Calls MCP Ticketing → Zammad creates ticket #12345
       d) Slack Notification → Posts to #support channel
-   
+
 5. FastAPI saves state to Redis (conversation:{id}:state)
-   
+
 6. FastAPI calls NestJS to save assistant response
-   
+
 7. User sees: "I created ticket #12345 for you."
 ```
 
 ### Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Frontend | React + TypeScript + Vite | Flow builder, chat UI, admin |
-| Proxy | Nginx/Traefik | Routing, SSL, load balancing |
-| Control Plane | NestJS + TypeScript | Metadata CRUD, security |
-| Execution Plane | FastAPI + Python | LangGraph runtime |
-| Event Layer | Kafka/RabbitMQ | Event streaming, webhooks |
-| Integration | FastAPI microservices | MCP servers for tools |
-| Database | PostgreSQL 16 | Relational data, JSONB |
-| Cache | Redis 7 | Sessions, state, cache |
-| Object Storage | MinIO | Documents, templates |
-| Vector DB | Qdrant | Semantic search |
-| Version Control | Gitea | Flow versioning |
-| Auth | Keycloak | OAuth2, multi-tenancy |
-| Monitoring | Prometheus + Grafana | Metrics, dashboards |
-| Logging | ELK Stack | Centralized logs |
+| Layer           | Technology                | Purpose                      |
+| --------------- | ------------------------- | ---------------------------- |
+| Frontend        | React + TypeScript + Vite | Flow builder, chat UI, admin |
+| Proxy           | Nginx/Traefik             | Routing, SSL, load balancing |
+| Control Plane   | NestJS + TypeScript       | Metadata CRUD, security      |
+| Execution Plane | FastAPI + Python          | LangGraph runtime            |
+| Event Layer     | Kafka/RabbitMQ            | Event streaming, webhooks    |
+| Integration     | FastAPI microservices     | MCP servers for tools        |
+| Database        | PostgreSQL 16             | Relational data, JSONB       |
+| Cache           | Redis 7                   | Sessions, state, cache       |
+| Object Storage  | MinIO                     | Documents, templates         |
+| Vector DB       | Qdrant                    | Semantic search              |
+| Version Control | Gitea                     | Flow versioning              |
+| Auth            | Keycloak                  | OAuth2, multi-tenancy        |
+| Monitoring      | Prometheus + Grafana      | Metrics, dashboards          |
+| Logging         | ELK Stack                 | Centralized logs             |
 
 ### Security & Multi-Tenancy
 
 **Authentication Flow:**
+
 1. User logs in → Keycloak issues JWT (contains userId, tenantId, roles)
 2. React stores JWT in httpOnly cookie
 3. Every API call includes JWT in Authorization header
@@ -112,8 +115,9 @@ This project implements an **8-layer multi-tenant AI platform**:
 6. All queries filtered by tenantId
 
 **Tenant Isolation:**
+
 - **Database:** WHERE tenantId = :tenantId on ALL queries
-- **Redis:** Keys prefixed with tenant:{tenantId}:*
+- **Redis:** Keys prefixed with tenant:{tenantId}:\*
 - **Qdrant:** Separate collections per tenant
 - **MinIO:** Buckets per tenant
 - **MCP:** Tenant ID required for all tool calls
@@ -141,9 +145,9 @@ This project implements an **8-layer multi-tenant AI platform**:
 ║  Phase 6: Conversation API            [████████████████████] 100% ✓      ║
 ║  Phase 7: Document Management         [████████████████████] 100% ✓      ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
-║  EXECUTION PLANE (FastAPI/Python)                      0.00% (0/2)       ║
+║  EXECUTION PLANE (FastAPI/Python)                     40.00% (0.8/2)     ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
-║  Phase 8: LangGraph Service           [░░░░░░░░░░░░░░░░░░░░]   0% ← NOW  ║
+║  Phase 8: LangGraph Service           [████████████████░░░░]  80% ← NOW  ║
 ║  Phase 9: MCP Integration Layer       [░░░░░░░░░░░░░░░░░░░░]   0%        ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
 ║  FRONTEND & INFRASTRUCTURE                             0.00% (0/2)       ║
@@ -221,7 +225,7 @@ Phase 6: ████████████████████ 100%  Comp
 Phase 7: ████████████████████ 100%  Complete  Document Management
 
 EXECUTION PLANE (FastAPI):
-Phase 8: ░░░░░░░░░░░░░░░░░░░░   0%  Current   LangGraph Service
+Phase 8: ████████████████░░░░  80%  Current   LangGraph Service
 Phase 9: ░░░░░░░░░░░░░░░░░░░░   0%  Planned   MCP Integration Layer
 
 FRONTEND & INFRA:
@@ -229,9 +233,9 @@ Phase 10: ░░░░░░░░░░░░░░░░░░░  0%  Planned
 Phase 11: ░░░░░░░░░░░░░░░░░░░  0%  Planned   Production Deployment
 ```
 
-**Overall Progress:** 63.64% (7 of 11 phases complete)  
+**Overall Progress:** 79.09% (7.8 of 11 phases complete)  
 **Control Plane Progress:** 100% (7 of 7 phases) ✓ COMPLETE  
-**Execution Plane Progress:** 0% (0 of 2 phases)  
+**Execution Plane Progress:** 40% (0.8 of 2 phases)  
 **Frontend Progress:** 0% (0 of 2 phases)
 
 ---
@@ -239,11 +243,13 @@ Phase 11: ░░░░░░░░░░░░░░░░░░░  0%  Planned
 ## CONTROL PLANE PHASES (NestJS/TypeScript)
 
 ## Phase 1: Foundation Setup
+
 **Status:** Complete  
 **Completed:** November 5, 2025  
 **Time Spent:** 2 hours
 
 ### Goals
+
 - [x] NestJS 11.1.7 framework setup
 - [x] TypeScript 5.9.3 configuration
 - [x] Docker Compose with PostgreSQL 16 + Redis 7
@@ -253,32 +259,37 @@ Phase 11: ░░░░░░░░░░░░░░░░░░░  0%  Planned
 - [x] Health check endpoint
 
 ### Deliverables
--  `docker-compose.yml` - Infrastructure as code
--  `tsconfig.json` - TypeScript settings
--  `src/main.ts` - NestJS bootstrap
--  `src/controllers/app.controller.ts` - Health check
--  `.env` - Environment variables
+
+- `docker-compose.yml` - Infrastructure as code
+- `tsconfig.json` - TypeScript settings
+- `src/main.ts` - NestJS bootstrap
+- `src/controllers/app.controller.ts` - Health check
+- `.env` - Environment variables
 
 ### Key Decisions
+
 - **NestJS over Express:** Chosen for dependency injection, decorators, and enterprise patterns
 - **PostgreSQL over MongoDB:** Relational data with JSONB for flexible workflow storage
 - **Docker first:** Ensures consistent dev environment across team
 
 ### Validation Criteria
--  Server starts on port 3000
--  Swagger UI accessible at `/api`
--  PostgreSQL container running on port 5432
--  Redis container running on port 6379
--  Health check returns 200 OK
+
+- Server starts on port 3000
+- Swagger UI accessible at `/api`
+- PostgreSQL container running on port 5432
+- Redis container running on port 6379
+- Health check returns 200 OK
 
 ---
 
-##  Phase 2: Database Schema & ORM
+## Phase 2: Database Schema & ORM
+
 **Status:** Complete  
 **Completed:** November 6, 2025  
 **Time Spent:** 3 hours
 
 ### Goals
+
 - [x] Design multi-tenant schema
 - [x] Create 7 core models (Tenant, User, Agent, Tool, Conversation, Message, Document)
 - [x] Define 5 enums (TenantPlan, UserRole, AgentStatus, ToolType, MessageRole)
@@ -287,11 +298,13 @@ Phase 11: ░░░░░░░░░░░░░░░░░░░  0%  Planned
 - [x] Generate Prisma Client
 
 ### Deliverables
--  `prisma/schema.prisma` - Complete data model
--  `prisma/migrations/20251106022522_ai_platform_schema/` - Migration files
--  `src/services/prisma.service.ts` - Database connection singleton
+
+- `prisma/schema.prisma` - Complete data model
+- `prisma/migrations/20251106022522_ai_platform_schema/` - Migration files
+- `src/services/prisma.service.ts` - Database connection singleton
 
 ### Schema Architecture
+
 ```
 Tenant (Root)
 ├── Users (1:N, CASCADE)
@@ -303,27 +316,31 @@ Tenant (Root)
 ```
 
 ### Key Decisions
+
 - **CUID over UUID:** Shorter, lexicographically sortable IDs
 - **CASCADE deletes:** Ensures tenant deletion cleans up ALL data
 - **JSONB for workflows:** Flexibility for LangGraph flow definitions
 - **Separate Tool model:** Reusable integrations across agents
 
 ### Validation Criteria
--  Migration applied: `npx prisma migrate status`
--  All 7 tables created in PostgreSQL
--  Prisma Studio shows tables: `npm run db:studio`
--  No TypeScript compilation errors
+
+- Migration applied: `npx prisma migrate status`
+- All 7 tables created in PostgreSQL
+- Prisma Studio shows tables: `npm run db:studio`
+- No TypeScript compilation errors
 
 ---
 
-##  Phase 3: Multi-Tenancy Foundation
+## Phase 3: Multi-Tenancy Foundation
+
 **Status:** Complete  
 **Completed:** November 10, 2025  
 **Time Spent:** 4 hours
 
 ### Subphases
 
-#### Phase 3.1: TenantGuard Security Layer 
+#### Phase 3.1: TenantGuard Security Layer
+
 - [x] Create `src/guards/tenant.guard.ts`
 - [x] Implement `CanActivate` interface
 - [x] Validate `X-Tenant-Id` header
@@ -332,7 +349,8 @@ Tenant (Root)
 - [x] Error handling (400 for missing, 403 for invalid)
 - [x] Documentation: `TENANT_GUARD_EXPLANATION.md`
 
-#### Phase 3.2: Tenants CRUD Module 
+#### Phase 3.2: Tenants CRUD Module
+
 - [x] Create `src/tenants/` module structure
 - [x] Implement TenantsController (5 endpoints)
 - [x] Implement TenantsService with business logic
@@ -342,7 +360,8 @@ Tenant (Root)
 - [x] Register module in `app.module.ts`
 - [x] Swagger documentation
 
-#### Phase 3.3: Apply Tenant Isolation 
+#### Phase 3.3: Apply Tenant Isolation
+
 - [x] Apply `@UseGuards(TenantGuard)` to UsersController
 - [x] Update UsersService to accept `tenantId` parameter
 - [x] Add `where: { tenantId }` filters to Prisma queries
@@ -350,13 +369,15 @@ Tenant (Root)
 - [x] Update Swagger docs with security requirements
 
 ### Deliverables
--  `src/guards/tenant.guard.ts` - Security middleware
--  `src/tenants/` - Complete CRUD module
--  `TENANT_GUARD_EXPLANATION.md` - Architecture documentation
--  Updated `src/controllers/users.controller.ts` - Tenant-aware endpoints
--  Updated `src/services/users.service.ts` - Filtered queries
+
+- `src/guards/tenant.guard.ts` - Security middleware
+- `src/tenants/` - Complete CRUD module
+- `TENANT_GUARD_EXPLANATION.md` - Architecture documentation
+- Updated `src/controllers/users.controller.ts` - Tenant-aware endpoints
+- Updated `src/services/users.service.ts` - Filtered queries
 
 ### API Endpoints Created
+
 ```
 POST   /tenants        - Create tenant
 GET    /tenants        - List tenants (with counts)
@@ -370,28 +391,32 @@ GET    /users/:id      - Get user by ID
 ```
 
 ### Key Decisions
+
 - **Guard over Middleware:** NestJS guards integrate better with DI and route-level control
 - **Header-based tenant:** Simple, works with JWT later (Phase 7)
 - **400 vs 403:** 400 for missing header (client error), 403 for invalid tenant (authorization)
 - **Request attachment:** `req.tenant` pattern keeps controllers clean
 
 ### Validation Criteria
--  Can create tenant via POST /tenants
--  Missing X-Tenant-Id returns 400 Bad Request
--  Invalid tenant ID returns 403 Forbidden
--  Valid tenant ID filters data correctly
--  Tenant A cannot see Tenant B's users
--  All DTOs validate input properly
+
+- Can create tenant via POST /tenants
+- Missing X-Tenant-Id returns 400 Bad Request
+- Invalid tenant ID returns 403 Forbidden
+- Valid tenant ID filters data correctly
+- Tenant A cannot see Tenant B's users
+- All DTOs validate input properly
 
 ---
 
 ## Phase 4: Agent & Flow Management
+
 **Status:** Complete
 **Started:** November 11, 2025  
 **Completed:** November 13, 2025  
 **Time Spent:** 3 hours
 
 ### Goals
+
 - [x] Create Agent DTOs (Phase 4.1)
 - [x] Implement AgentsService (Phase 4.2)
 - [x] Implement AgentsController (Phase 4.3)
@@ -400,6 +425,7 @@ GET    /users/:id      - Get user by ID
 ### Tasks Breakdown
 
 #### Phase 4.1: Create Agent DTOs
+
 **Time Spent:** 30 minutes  
 **Completed:** November 11, 2025
 
@@ -408,22 +434,26 @@ GET    /users/:id      - Get user by ID
 - [x] `src/agents/dto/update-agent-status.dto.ts` - Status enum validation
 
 #### Phase 4.2: Implement AgentsService
+
 **Time Spent:** 1.5 hours  
 **Completed:** November 13, 2025
 
 Methods implemented:
+
 - [x] `create()` - Create new agent with duplicate name detection (P2002 error)
-- [x] `findAll(tenantId)` - List all agents for tenant with _count.conversations
+- [x] `findAll(tenantId)` - List all agents for tenant with \_count.conversations
 - [x] `findOne(id, tenantId)` - Get single agent with ownership validation
-- [x] `update(id, tenantId, dto)` - Update agent with conflict detection  
+- [x] `update(id, tenantId, dto)` - Update agent with conflict detection
 - [x] `updateStatus(id, tenantId, status)` - Change agent status (DRAFT/PUBLISHED/DISABLED)
 - [x] `remove(id, tenantId)` - Delete agent (prevents deletion if conversations exist)
 
 #### Phase 4.3: Implement AgentsController
+
 **Time Spent:** 45 minutes  
 **Completed:** November 13, 2025
 
 Endpoints created:
+
 - [x] POST /agents - Create agent (requires X-Tenant-Id header)
 - [x] GET /agents - List agents (tenant-scoped via TenantGuard)
 - [x] GET /agents/:id - Get single agent
@@ -432,6 +462,7 @@ Endpoints created:
 - [x] DELETE /agents/:id - Delete agent
 
 #### Phase 4.4: Testing & Validation
+
 **Time Spent:** 45 minutes  
 **Completed:** November 13, 2025
 
@@ -444,6 +475,7 @@ Endpoints created:
 - [x] Verified status transitions (DRAFT to PUBLISHED)
 
 ### Deliverables Created
+
 - [x] `src/agents/dto/create-agent.dto.ts`
 - [x] `src/agents/dto/update-agent.dto.ts`
 - [x] `src/agents/dto/update-agent-status.dto.ts`
@@ -455,6 +487,7 @@ Endpoints created:
 - [x] `.vscode/tasks.json` - Added test task
 
 ### API Endpoints Built
+
 ```
 POST   /agents              - Create new agent workflow
 GET    /agents              - List all agents (tenant-scoped)
@@ -465,6 +498,7 @@ DELETE /agents/:id          - Delete agent (blocks if conversations exist)
 ```
 
 ### Validation Criteria
+
 - [x] Can create agent via POST /agents
 - [x] Agent requires X-Tenant-Id header (400 if missing)
 - [x] Duplicate agent name returns 409 Conflict
@@ -472,11 +506,12 @@ DELETE /agents/:id          - Delete agent (blocks if conversations exist)
 - [x] Status enum validates (DRAFT/PUBLISHED/DISABLED)
 - [x] Tenant isolation: Agent A cannot access Tenant B's agents (404)
 - [x] Cannot delete agent with existing conversations
-- [x] List agents includes conversation count (_count.conversations)
+- [x] List agents includes conversation count (\_count.conversations)
 - [x] Update agent handles partial updates correctly
 - [x] Status transitions work (DRAFT to PUBLISHED)
 
 ### Key Decisions
+
 - **flowJson Structure:** Stores LangGraph workflow as JSON with nodes (id, type) and edges (from, to)
 - **Status Workflow:** DRAFT (editing) to PUBLISHED (production) to DISABLED (archived)
 - **Conversation Protection:** Cannot delete agents with active conversations (data integrity)
@@ -487,11 +522,13 @@ DELETE /agents/:id          - Delete agent (blocks if conversations exist)
 ---
 
 ## Phase 5: Tool Management & Configuration
+
 **Status:** Complete  
 **Completed:** November 13, 2025  
 **Time Spent:** 3 hours
 
 ### Goals
+
 - [x] Create Tools CRUD module
 - [x] Implement tool configuration storage
 - [x] Define tool types (KB_SEARCH, TICKET_CREATE, SLACK_POST, TEAMS_POST, CUSTOM)
@@ -500,14 +537,16 @@ DELETE /agents/:id          - Delete agent (blocks if conversations exist)
 - [x] Tool testing endpoint
 
 ### Deliverables
--  `src/tools/tools.module.ts`
--  `src/tools/tools.service.ts` - Business logic with encryption
--  `src/tools/tools.controller.ts` - 6 REST endpoints
--  `src/tools/dto/create-tool.dto.ts` - Input validation
--  `src/tools/dto/update-tool.dto.ts` - Partial updates
--  `test/test-tools.sh` - Automated testing script
+
+- `src/tools/tools.module.ts`
+- `src/tools/tools.service.ts` - Business logic with encryption
+- `src/tools/tools.controller.ts` - 6 REST endpoints
+- `src/tools/dto/create-tool.dto.ts` - Input validation
+- `src/tools/dto/update-tool.dto.ts` - Partial updates
+- `test/test-tools.sh` - Automated testing script
 
 ### API Endpoints Built
+
 ```
 POST   /tools           - Register new tool
 GET    /tools           - List available tools (tenant-scoped)
@@ -518,6 +557,7 @@ POST   /tools/:id/test  - Test tool execution (placeholder for Phase 9)
 ```
 
 ### Key Features Implemented
+
 - **AES-256 Encryption:** Automatic encryption/decryption of sensitive fields (apiKey, token, clientSecret, password, privateKey)
 - **Tenant Isolation:** TenantGuard applied to all endpoints
 - **Security:** authConfig hidden in list view, only exposed in single-tool GET
@@ -525,6 +565,7 @@ POST   /tools/:id/test  - Test tool execution (placeholder for Phase 9)
 - **Testing:** 12 automated tests including security and isolation validation
 
 ### Tool Schema Example
+
 ```typescript
 {
   name: "kb_search_qdrant",
@@ -553,26 +594,29 @@ POST   /tools/:id/test  - Test tool execution (placeholder for Phase 9)
 ```
 
 ### Validation Criteria
--  Can create tool via POST /tools
--  API keys encrypted in database using AES-256
--  Tool listing hides sensitive authConfig
--  Single tool GET returns decrypted authConfig
--  Tenant isolation prevents cross-tenant access
--  Duplicate tool names return 409 Conflict
--  Update endpoint handles partial updates
--  Delete endpoint removes tool successfully
--  Test endpoint validates tool ownership (Phase 9: will call MCP)
--  All 12 automated tests passing
+
+- Can create tool via POST /tools
+- API keys encrypted in database using AES-256
+- Tool listing hides sensitive authConfig
+- Single tool GET returns decrypted authConfig
+- Tenant isolation prevents cross-tenant access
+- Duplicate tool names return 409 Conflict
+- Update endpoint handles partial updates
+- Delete endpoint removes tool successfully
+- Test endpoint validates tool ownership (Phase 9: will call MCP)
+- All 12 automated tests passing
 
 ---
 
-##  Phase 6: Conversations & Messages API
+## Phase 6: Conversations & Messages API
+
 **Status:** ✅ Complete  
 **Layer:** Control Plane (NestJS)  
 **Completed:** November 13, 2025  
 **Actual Time:** 3 hours
 
 ### Goals
+
 - [x] Create Conversations CRUD module
 - [x] Create Messages CRUD module
 - [x] Link conversations to agents
@@ -581,7 +625,9 @@ POST   /tools/:id/test  - Test tool execution (placeholder for Phase 9)
 - [x] Message metadata tracking with JSONB
 
 ### Deliverables
+
 ✅ **Implemented:**
+
 - `src/conversations/conversations.module.ts`
 - `src/conversations/conversations.service.ts` - 7 methods including message operations
 - `src/conversations/conversations.controller.ts` - 7 REST endpoints
@@ -591,6 +637,7 @@ POST   /tools/:id/test  - Test tool execution (placeholder for Phase 9)
 - `test/test-conversations.sh` - 15 automated tests
 
 ### API Endpoints Built
+
 ```
 POST   /conversations              - Start new conversation (validates agent ownership)
 GET    /conversations              - List conversations with agent info and message counts
@@ -603,6 +650,7 @@ GET    /conversations/:id/messages - Get message history ordered by createdAt
 ```
 
 ### Key Features Implemented
+
 - **Message Roles:** USER, ASSISTANT, TOOL, SYSTEM enum for complete conversation tracking
 - **Agent Ownership:** Validates agent exists and belongs to tenant before conversation creation
 - **Cascade Deletion:** Deleting conversation automatically removes all messages
@@ -611,6 +659,7 @@ GET    /conversations/:id/messages - Get message history ordered by createdAt
 - **Swagger Documentation:** Full OpenAPI docs with examples
 
 ### Validation Criteria Met
+
 ✅ All 7 endpoints operational  
 ✅ 15 automated tests passing  
 ✅ Multi-tenant isolation verified  
@@ -619,18 +668,21 @@ GET    /conversations/:id/messages - Get message history ordered by createdAt
 ✅ CASCADE delete confirmed
 
 ### Integration Point
+
 - **Phase 8 TODO:** When message is posted, NestJS will call FastAPI `/execute` endpoint
 - **Phase 8 TODO:** FastAPI saves assistant response back to NestJS via callback
 
 ---
 
-##  Phase 7: Document Management & Vector Search
+## Phase 7: Document Management & Vector Search
+
 **Status:** ✅ Complete (Metadata Layer)  
 **Layer:** Control Plane (NestJS)  
 **Completed:** November 13, 2025  
 **Actual Time:** 2.5 hours
 
 ### Goals
+
 - [x] Create Documents CRUD module
 - [x] Document metadata storage with source types
 - [x] Basic text search functionality
@@ -641,7 +693,9 @@ GET    /conversations/:id/messages - Get message history ordered by createdAt
 - [ ] Semantic search API - **Phase 7 Enhancement**
 
 ### Deliverables
+
 ✅ **Implemented:**
+
 - `src/documents/documents.module.ts`
 - `src/documents/documents.service.ts` - 6 methods including basic search
 - `src/documents/documents.controller.ts` - 6 REST endpoints
@@ -650,12 +704,14 @@ GET    /conversations/:id/messages - Get message history ordered by createdAt
 - `test/test-documents.sh` - 12 automated tests
 
 ⏳ **Pending (Phase 7 Enhancement):**
+
 - File upload service (S3/MinIO integration)
 - Document chunking service
 - Vector embedding generation
 - Qdrant integration for semantic search
 
 ### API Endpoints Built
+
 ```
 POST   /documents              - Register document metadata
 GET    /documents              - List documents (tenant-scoped)
@@ -666,6 +722,7 @@ DELETE /documents/:id          - Delete document
 ```
 
 ### Key Features Implemented
+
 - **Document Sources:** upload, sharepoint, confluence, url enum types
 - **Metadata Storage:** JSONB field for flexible document metadata
 - **Basic Search:** Case-insensitive text search on title and URI
@@ -673,6 +730,7 @@ DELETE /documents/:id          - Delete document
 - **Swagger Documentation:** Full OpenAPI docs with @ApiQuery for search
 
 ### Validation Criteria Met
+
 ✅ All 6 endpoints operational  
 ✅ 12 automated tests passing  
 ✅ Multi-tenant isolation verified  
@@ -680,11 +738,13 @@ DELETE /documents/:id          - Delete document
 ✅ All 4 document source types supported
 
 ### TODO Comments Added for Phase 7 Enhancement
+
 - `remove()`: Delete actual file from storage (S3/MinIO)
 - `remove()`: Delete embeddings from vector DB (Qdrant)
 - `search()`: Implement semantic search via Qdrant
 
 ### Technical Stack (Planned for Enhancement)
+
 - **Storage:** MinIO (S3-compatible) for file storage
 - **Vector DB:** Qdrant for embeddings and semantic search
 - **Chunking:** LangChain text splitters
@@ -696,47 +756,125 @@ DELETE /documents/:id          - Delete document
 
 ## EXECUTION PLANE PHASES (FastAPI/Python)
 
-##  Phase 8: LangGraph Execution Service
-**Status:** Planned  
+## Phase 8: LangGraph Execution Service
+
+**Status:** 80% Complete (Core service working, Docker pending)  
 **Layer:** Execution Plane (FastAPI/Python)  
-**Target Start:** November 20, 2025  
-**Estimated Time:** 6-8 hours
+**Started:** November 13, 2025  
+**Estimated Completion:** November 14, 2025 (1-2 hours remaining)
 
 ### Goals
-- [ ] Set up FastAPI Python project
-- [ ] Install LangGraph + LangChain libraries
-- [ ] Implement workflow executor
-- [ ] HTTP endpoints for execution
-- [ ] Redis integration for conversation state
-- [ ] PostgreSQL read access for agent definitions
-- [ ] Streaming responses via Server-Sent Events
+
+- [x] Set up FastAPI Python project
+- [x] Install LangGraph + LangChain libraries
+- [x] Implement workflow executor (basic version)
+- [x] HTTP endpoints for execution
+- [x] Redis integration for conversation state
+- [x] PostgreSQL read access for agent definitions
+- [ ] Streaming responses via Server-Sent Events (TODO)
+- [ ] Docker integration (Dockerfile + docker-compose update)
+- [ ] End-to-end testing with real agent
 
 ### Deliverables
-- `langgraph-service/` directory
-- `langgraph-service/main.py` - FastAPI app
-- `langgraph-service/executor.py` - LangGraph runner
-- `langgraph-service/requirements.txt` - Dependencies
-- `docker-compose.yml` - Add FastAPI service
 
-### API Endpoints to Build
+- [x] `langgraph-service/` directory
+- [x] `langgraph-service/main.py` - FastAPI app (152 lines)
+- [x] `langgraph-service/executor.py` - LangGraph runner (120 lines)
+- [x] `langgraph-service/config.py` - Settings module (40 lines)
+- [x] `langgraph-service/database.py` - PostgreSQL connection (90 lines)
+- [x] `langgraph-service/redis_client.py` - Redis state management (100 lines)
+- [x] `langgraph-service/requirements.txt` - 27 dependencies
+- [x] `langgraph-service/.env` - Environment configuration
+- [x] `langgraph-service/.gitignore` - Git ignore rules
+- [x] Virtual environment (venv) setup
+- [ ] `langgraph-service/Dockerfile` (TODO)
+- [ ] `docker-compose.yml` - Add FastAPI service (TODO)
+- [ ] `langgraph-service/README.md` - Setup documentation (TODO)
+
+### API Endpoints Built
+
 ```python
-POST   /execute        - Run agent workflow (sync)
-POST   /stream         - Run workflow with SSE streaming
-POST   /validate       - Validate flowJson structure
-GET    /health         - Service health check
+GET    /               - Service information ✅ TESTED
+GET    /health         - Service health check ✅ TESTED
+POST   /execute        - Run agent workflow ✅ WORKING (echo mode)
+POST   /validate       - Validate flowJson structure ✅ TESTED
+POST   /stream         - SSE streaming (TODO)
 ```
 
-### Execution Flow
-1. NestJS sends `POST /execute` with `{ agentId, conversationId, message }`
-2. FastAPI loads agent's `flowJson` from PostgreSQL
-3. FastAPI builds LangGraph StateGraph from JSON
-4. FastAPI executes workflow with LangChain
-5. FastAPI calls tools via NestJS `/tools/:id/execute` endpoint
-6. FastAPI saves conversation state to Redis
-7. FastAPI returns assistant response
-8. FastAPI calls NestJS `POST /conversations/:id/messages` to save response
+### Technology Stack
+
+- **Framework:** FastAPI 0.104.1, Uvicorn 0.24.0
+- **AI Libraries:** LangGraph 0.0.26, LangChain 0.1.20, LangChain-OpenAI 0.1.7
+- **Database:** SQLAlchemy 2.0.23, asyncpg 0.29.0 (async PostgreSQL)
+- **State:** Redis 5.0.1, aioredis 2.0.1
+- **HTTP Client:** httpx 0.25.2 (for calling NestJS API)
+- **Validation:** Pydantic 2.5.0, pydantic-settings 2.1.0
+- **Environment:** Python 3.12, venv
+
+### Current Implementation Status
+
+**✅ Working Features:**
+
+- FastAPI service running on port 8000
+- Database connection to PostgreSQL (async SQLAlchemy)
+- Redis connection for conversation state
+- Health check endpoint returning healthy status
+- FlowJson validation logic working correctly
+- Execute endpoint accepting requests (currently echo mode)
+- Conversation state loading/saving to Redis
+- Tenant isolation enforced
+
+**⏭️ Pending Work:**
+
+1. Implement actual LangGraph StateGraph execution (currently returns echo)
+2. Create Dockerfile for langgraph-service
+3. Update docker-compose.yml to include FastAPI service
+4. Test /execute with real agent from NestJS database
+5. Verify state persistence in Redis
+6. Add SSE streaming support for real-time responses
+7. Create README.md with setup instructions
+
+**📊 Testing Results:**
+
+```bash
+# All 3 endpoints tested successfully:
+GET  /health   → {"status":"healthy","service":"langgraph-execution"}
+GET  /         → {"service":"LangGraph Execution Service","version":"1.0.0"}
+POST /validate → {"valid":true,"message":"Flow definition is valid"}
+```
+
+### Execution Flow (Implemented)
+
+### Execution Flow (Implemented)
+
+1. ✅ NestJS sends `POST /execute` with `{ agentId, conversationId, message, tenantId }`
+2. ✅ FastAPI loads agent's `flowJson` from PostgreSQL (with tenant isolation)
+3. ✅ FastAPI loads previous conversation state from Redis
+4. ✅ FastAPI validates flowJson structure (nodes/edges)
+5. ⏭️ FastAPI builds LangGraph StateGraph from JSON (TODO)
+6. ⏭️ FastAPI executes workflow with LangChain (TODO - currently echo)
+7. ⏭️ FastAPI calls tools via NestJS `/tools/:id/execute` endpoint (TODO)
+8. ✅ FastAPI saves updated conversation state to Redis (24-hour TTL)
+9. ✅ FastAPI returns assistant response
+10. ⏭️ FastAPI calls NestJS `POST /conversations/:id/messages` to save response (TODO)
+
+### Files Created This Phase
+
+```
+langgraph-service/
+├── .env                   # Environment variables (PORT, DATABASE_URL, REDIS_URL)
+├── .gitignore            # Ignore venv/, .env, __pycache__, *.pyc
+├── requirements.txt      # 27 Python dependencies
+├── config.py             # Pydantic settings module (40 lines)
+├── database.py           # Async PostgreSQL connection (90 lines)
+├── redis_client.py       # Async Redis state management (100 lines)
+├── executor.py           # Workflow validation and execution (120 lines)
+├── main.py               # FastAPI application with 4 endpoints (152 lines)
+└── venv/                 # Virtual environment (not in git)
+```
 
 ### Example LangGraph Workflow
+
 ```python
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
@@ -762,6 +900,7 @@ graph.add_node("create_ticket", create_ticket)
 ```
 
 ### Docker Setup
+
 ```yaml
 # Add to docker-compose.yml
 langgraph-service:
@@ -779,13 +918,15 @@ langgraph-service:
 
 ---
 
-##  Phase 9: MCP Integration Layer
+## Phase 9: MCP Integration Layer
+
 **Status:** Planned  
 **Layer:** Integration (FastAPI Microservices)  
 **Target Start:** November 23, 2025  
 **Estimated Time:** 6-8 hours
 
 ### Goals
+
 - [ ] Build KB Search MCP server (FastAPI + Elasticsearch/Qdrant)
 - [ ] Build Ticketing MCP server (FastAPI + Zammad API)
 - [ ] Build Slack/Teams notification MCP server
@@ -794,6 +935,7 @@ langgraph-service:
 - [ ] Rate limiting and error handling
 
 ### Deliverables
+
 - `mcp-kb-search/` - Knowledge base search microservice
 - `mcp-ticketing/` - Ticket creation microservice
 - `mcp-notifications/` - Slack/Teams notifications
@@ -801,6 +943,7 @@ langgraph-service:
 - Updated `docker-compose.yml` with all MCP services
 
 ### MCP Server: KB Search
+
 ```python
 # mcp-kb-search/main.py
 from fastapi import FastAPI
@@ -821,6 +964,7 @@ async def search_kb(query: str, tenant_id: str, top_k: int = 5):
 ```
 
 ### MCP Server: Ticketing (Zammad)
+
 ```python
 # mcp-ticketing/main.py
 from fastapi import FastAPI
@@ -837,7 +981,7 @@ async def create_ticket(
 ):
     # Get Zammad config for tenant from NestJS
     config = await get_tenant_tool_config(tenant_id, "TICKET_CREATE")
-    
+
     # Call Zammad API
     async with httpx.AsyncClient() as client:
         response = await client.post(
@@ -849,6 +993,7 @@ async def create_ticket(
 ```
 
 ### Architecture Diagram
+
 ```
 LangGraph Service → MCP KB Search → Qdrant Vector DB
                  → MCP Ticketing → Zammad API
@@ -860,13 +1005,15 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 
 ## FRONTEND & INFRASTRUCTURE PHASES
 
-##  Phase 10: React Flow Authoring UI
+## Phase 10: React Flow Authoring UI
+
 **Status:** Planned  
 **Layer:** Frontend (React/TypeScript)  
 **Target Start:** November 26, 2025  
 **Estimated Time:** 8-10 hours
 
 ### Goals
+
 - [ ] Create React app with Vite
 - [ ] Visual flow builder (React Flow library)
 - [ ] Drag-and-drop node editor
@@ -877,6 +1024,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 - [ ] Authentication UI (login/register)
 
 ### Tech Stack
+
 - **Framework:** React 18 + TypeScript
 - **Build:** Vite
 - **UI Library:** Shadcn/ui + Tailwind CSS
@@ -885,6 +1033,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 - **API Client:** TanStack Query (React Query)
 
 ### Pages to Build
+
 1. **Dashboard** - Overview of agents, conversations, tools
 2. **Flow Builder** - Visual LangGraph editor
 3. **Agent Manager** - List/Create/Edit agents
@@ -894,6 +1043,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 7. **Settings** - Tenant settings, API keys
 
 ### Flow Builder Features
+
 - Drag-and-drop nodes (KB Lookup, Ticket Create, Conditional, etc.)
 - Connect nodes with edges
 - Configure node parameters (forms)
@@ -904,13 +1054,15 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 
 ---
 
-##  Phase 11: Production Deployment & DevOps
+## Phase 11: Production Deployment & DevOps
+
 **Status:** Planned  
 **Layer:** Infrastructure (Kubernetes/Docker/CI/CD)  
 **Target Start:** December 1, 2025  
 **Estimated Time:** 6-8 hours
 
 ### Goals
+
 - [ ] Kubernetes deployment manifests
 - [ ] Helm charts for easy deployment
 - [ ] CI/CD pipeline (GitHub Actions)
@@ -923,6 +1075,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 - [ ] Nginx Ingress for routing
 
 ### Infrastructure Stack
+
 - **Container Orchestration:** Kubernetes (GKE/EKS/AKS or self-hosted)
 - **Reverse Proxy:** Nginx Ingress Controller
 - **Auth:** Keycloak (OAuth2/OIDC)
@@ -932,6 +1085,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 - **CI/CD:** GitHub Actions
 
 ### Deployment Architecture
+
 ```
 ┌─────────────────────────────────────────────────┐
 │  Nginx Ingress (SSL Termination)                │
@@ -965,6 +1119,7 @@ LangGraph Service → MCP KB Search → Qdrant Vector DB
 Use this checklist **before starting each coding session** to stay on track:
 
 ### Pre-Session Checklist
+
 - [ ] Read `ROADMAP.md` - Confirm current phase
 - [ ] Read phase-specific guide (e.g., `PHASE_4_GUIDE.md`)
 - [ ] Check `DEV_SESSION_LOG.md` - Review last session notes
@@ -974,6 +1129,7 @@ Use this checklist **before starting each coding session** to stay on track:
 - [ ] Pull latest changes: `git pull origin main`
 
 ### During Development
+
 - [ ] Follow the phase guide step-by-step
 - [ ] Update `DEV_SESSION_LOG.md` with decisions made
 - [ ] Mark roadmap tasks as complete in this file
@@ -981,6 +1137,7 @@ Use this checklist **before starting each coding session** to stay on track:
 - [ ] Document complex logic in code comments
 
 ### Post-Session Checklist
+
 - [ ] Update `ROADMAP.md` progress percentages
 - [ ] Add entry to `CHANGELOG.md` with changes made
 - [ ] Update `README.md` roadmap section if phase complete
@@ -998,28 +1155,34 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 ## 📝 Phase X: [Phase Name] - [Date]
 
 ### Session Goal
+
 [What you're building today]
 
 ### Pre-Session Status
+
 - [ ] Docker running
 - [ ] Database migrated
 - [ ] Previous phase verified complete
 - [ ] Read phase guide
 
 ### Tasks
+
 - [ ] Task 1 (estimated time)
 - [ ] Task 2 (estimated time)
 - [ ] Task 3 (estimated time)
 
 ### Decisions Made
+
 **Q:** [Question or problem]
 **Decision:** [What you decided]
 **Reasoning:** [Why this approach]
 
 ### Blockers Encountered
+
 [Any issues that slowed progress]
 
 ### Next Session
+
 [What to start with tomorrow]
 ```
 
@@ -1027,20 +1190,21 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 
 ## 🔗 Document Cross-Reference
 
-| Document | Purpose | Update Frequency |
-|----------|---------|------------------|
-| `ROADMAP.md` (this file) | Master plan, progress tracking | After each phase |
-| `START_HERE.md` | Quick start for next session | Daily |
-| `DEV_SESSION_LOG.md` | Development notes, decisions | During session |
-| `CHANGELOG.md` | Version history | After each commit |
-| `README.md` | Public documentation | When phase completes |
-| `PHASE_X_GUIDE.md` | Step-by-step instructions | Before phase starts |
+| Document                 | Purpose                        | Update Frequency     |
+| ------------------------ | ------------------------------ | -------------------- |
+| `ROADMAP.md` (this file) | Master plan, progress tracking | After each phase     |
+| `START_HERE.md`          | Quick start for next session   | Daily                |
+| `DEV_SESSION_LOG.md`     | Development notes, decisions   | During session       |
+| `CHANGELOG.md`           | Version history                | After each commit    |
+| `README.md`              | Public documentation           | When phase completes |
+| `PHASE_X_GUIDE.md`       | Step-by-step instructions      | Before phase starts  |
 
 ---
 
 ## Quick Reference: What to Build When
 
 ### Now (November 13-14): Complete Control Plane Foundation
+
 - ✅ Phase 4: Finish Agent CRUD (3 more tasks)
 - ⏭️ Phase 5: Tool Management (4 hours)
 - ⏭️ Phase 6: Conversations API (4 hours)
@@ -1051,6 +1215,7 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 ---
 
 ### Next (November 20-25): Build Execution Plane
+
 - ⏭️ Phase 8: FastAPI + LangGraph Service (8 hours)
 - ⏭️ Phase 9: MCP Integration Layer (8 hours)
 
@@ -1059,6 +1224,7 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 ---
 
 ### Later (November 26+): Frontend & Production
+
 - ⏭️ Phase 10: React Flow Authoring UI (10 hours)
 - ⏭️ Phase 11: Production Deployment (8 hours)
 
@@ -1069,6 +1235,7 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 ## 📊 Success Metrics
 
 ### Code Quality
+
 - [ ] All endpoints have Swagger documentation
 - [ ] All DTOs use class-validator
 - [ ] All services have error handling
@@ -1077,6 +1244,7 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 - [ ] No console.log statements (use Logger)
 
 ### Testing
+
 - [ ] Manual testing via Swagger UI
 - [ ] Test tenant isolation for all modules
 - [ ] Test error cases (400, 403, 404, 409)
@@ -1084,6 +1252,7 @@ Copy this template to `DEV_SESSION_LOG.md` when starting a new phase:
 - [ ] End-to-end flow execution tests
 
 ### Documentation
+
 - [ ] Code has JSDoc/docstring comments
 - [ ] README.md reflects current features
 - [ ] Each phase has explanation doc
