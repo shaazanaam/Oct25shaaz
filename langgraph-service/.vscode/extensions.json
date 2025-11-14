@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    // Python development
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    
+    // Database & Redis
+    "cweijan.vscode-redis-client",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    
+    // Code quality
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    
+    // API development
+    "42crunch.vscode-openapi",
+    "humao.rest-client",
+    
+    // Docker (for future use)
+    "ms-azuretools.vscode-docker"
+  ]
+}
