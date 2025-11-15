@@ -1,0 +1,58 @@
+[0;34m╔══════════════════════════════════════════════════════════╗[0m
+[0;34m║   Full Stack Integration Test - LangGraph Platform     ║[0m
+[0;34m╔══════════════════════════════════════════════════════════╗[0m
+
+
+[0;34m═══ Phase 1: Service Health Checks ═══[0m
+
+[1;33mChecking FastAPI service...[0m
+[0;32m✓ PASS[0m - FastAPI Health Check
+
+[1;33mChecking NestJS service...[0m
+[0;32m✓ PASS[0m - NestJS Health Check
+
+[0;34m═══ Phase 2: FastAPI Standalone Tests ═══[0m
+
+[1;33mTesting:[0m GET / (Service Info)
+[0;32m✓ PASS[0m - GET / (Service Info) (HTTP 200)
+
+[1;33mTesting:[0m GET /health
+[0;32m✓ PASS[0m - GET /health (HTTP 200)
+
+[1;33mTesting:[0m POST /validate (Valid FlowJson)
+[0;32m✓ PASS[0m - POST /validate (Valid FlowJson)
+
+[1;33mTesting:[0m POST /validate (Invalid FlowJson - Missing nodes)
+[0;32m✓ PASS[0m - POST /validate (Invalid FlowJson)
+
+[0;34m═══ Phase 3: Full Stack Integration Tests ═══[0m
+
+[1;33mStep 1:[0m Creating test tenant...
+[0;32m✓ Tenant created[0m - ID: cmi0eq3tz000vv7z4aj1c1fjo
+[0;32m✓ PASS[0m - Create Tenant
+
+[1;33mStep 2:[0m Creating test agent...
+[0;32m✓ Agent created[0m - ID: cmi0eq3w6000xv7z4kz60ml9f
+[0;32m✓ PASS[0m - Create Agent
+
+[1;33mStep 3:[0m Publishing agent...
+[0;32m✓ Agent published[0m
+[0;32m✓ PASS[0m - Publish Agent
+
+[1;33mStep 4:[0m Creating conversation...
+[0;32m✓ Conversation created[0m - ID: cmi0eq40t000zv7z4mm8pzeyz
+[0;32m✓ PASS[0m - Create Conversation
+
+[1;33mStep 5:[0m Executing workflow via FastAPI...
+[0;32m✓ Workflow executed successfully[0m
+[0;32m✓ PASS[0m - Execute Workflow (FastAPI)
+  [0;34mResponse:[0m [Echo from FastAPI] Agent 'cmi0eq3w6000xv7z4kz60ml9f' received: Hello from full stack test!
+[Echo from FastAPI] Agent 'cmi0eq3w6000xv7z4kz60ml9f' received: Hello from full stack test!
+
+[1;33mStep 6:[0m Checking conversation state persistence...
+  [0;34mInfo:[0m Check Redis for key: conversation:cmi0eq3tz000vv7z4aj1c1fjo:cmi0eq40t000zv7z4mm8pzeyz:state
+  [0;34mCommand:[0m docker exec -it oct25shaaz-redis-1 redis-cli GET "conversation:cmi0eq3tz000vv7z4aj1c1fjo:cmi0eq40t000zv7z4mm8pzeyz:state"
+
+[1;33mStep 7:[0m Testing conversation continuity (second message)...
+[0;32m✓ Second message executed[0m
+[0;32m✓ PASS[0m - Conversation Continuity
