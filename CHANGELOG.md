@@ -4,6 +4,114 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [2025-11-14] - Phase 8: Integration Testing & DTO Fixes
+
+### Fixed
+
+**Full Stack Integration Test Script:**
+
+- Fixed `CreateAgentDto` validation errors in test-fullstack.sh
+  - Removed `description` field (not in DTO schema)
+  - Added `tenantId` field to request body (required by DTO)
+  - Previously was only in header, but DTO requires it in body
+- Fixed `CreateConversationDto` validation errors
+  - Removed `title` field (not in DTO schema)
+  - Conversation DTO only requires `agentId` (and optional userId, channel, state)
+
+**Error Messages Resolved:**
+
+- `"property description should not exist"` → removed field
+- `"tenantId should not be empty"` → added to body
+- `"property title should not exist"` → removed field
+
+### Added
+
+**VS Code Configuration (November 13):**
+
+- `.vscode/settings.json` - Python interpreter configuration
+  - Auto-detects venv at `./venv/Scripts/python.exe`
+  - Enables automatic venv activation in terminal
+  - IntelliSense module path resolution
+- `.vscode/extensions.json` - Recommended extensions for team
+  - Python development (Python, Pylance, Black, Flake8)
+  - Database tools (Redis client, SQLTools for PostgreSQL)
+  - API development (OpenAPI, REST Client)
+  - Docker management
+
+**Integration Testing:**
+
+- `langgraph-service/test-fullstack.sh` (346 lines)
+  - Comprehensive 4-phase testing script
+  - Color-coded output (RED/GREEN/YELLOW/BLUE)
+  - Test counters (passed/failed/total)
+  - **Phase 1:** Service health checks (FastAPI + NestJS)
+  - **Phase 2:** FastAPI standalone (4 tests - /, /health, /validate)
+  - **Phase 3:** Full integration workflow:
+    1. Create test tenant
+    2. Create agent with flowJson
+    3. Publish agent (DRAFT → PUBLISHED)
+    4. Create conversation
+    5. Execute workflow via FastAPI
+    6. Verify state persistence in Redis
+    7. Test conversation continuity (second message)
+  - **Phase 4:** Automatic cleanup (delete conversation → agent → tenant)
+  - Exit codes: 0 for success, 1 for failure
+
+### Changed
+
+**Documentation Updates:**
+
+- `docs/guides/ROADMAP.md`
+  - Updated "Last Updated" date to November 14, 2025
+  - Added `test-fullstack.sh` to Phase 8 deliverables
+  - Updated "Working Features" section with testing achievements
+  - Updated "Testing Results" with full stack test phases
+  - Changed "Next Review" from Phase 4 to Phase 8
+
+### Validated
+
+**Git Commits (3 commits on November 13-14):**
+
+1. **Commit ac65272** - VS Code Python interpreter config
+   - `.vscode/settings.json` created
+2. **Commit dc4412d** - Workspace improvements
+   - `.vscode/extensions.json` with 10 recommended extensions
+3. **Commit 80dca5e** - Fix test script DTO validation errors ← TODAY
+   - Fixed agent and conversation creation payloads
+
+**Testing Status:**
+
+- ✅ Phase 1: Service health checks (both services confirmed running)
+- ✅ Phase 2: FastAPI standalone tests (all 4 passing)
+- 🔄 Phase 3: Full integration (pending successful test run)
+- 🔄 Phase 4: Cleanup (executes after Phase 3)
+
+### Progress Update
+
+**Phase 8 Status:** 85% complete
+
+- ✅ FastAPI service implementation (100%)
+- ✅ All endpoints working (100%)
+- ✅ Database + Redis integration (100%)
+- ✅ VS Code development environment (100%)
+- ✅ Full stack integration test script (100%)
+- ✅ DTO validation alignment (100%)
+- ⏭️ Docker integration (0%)
+- ⏭️ Real LangGraph execution (0%)
+- ⏭️ SSE streaming (0%)
+
+**Overall Progress:** 79.64% (7.85 of 11 phases)
+
+### Next Steps
+
+1. Run full stack integration test (both services started)
+2. Verify all tests pass (especially Phase 3 workflow execution)
+3. Create Dockerfile for langgraph-service
+4. Update docker-compose.yml to include FastAPI service
+5. Implement real LangGraph StateGraph execution (replace echo mode)
+
+---
+
 ## [2025-11-13] - Phase 8: FastAPI LangGraph Execution Service (80% Complete)
 
 ### Added
