@@ -26,13 +26,56 @@
 services:
   postgres:
     image: postgres:16
+    container_name: ai-platform-postgres
     environment:
       POSTGRES_USER: ai
       POSTGRES_PASSWORD: ai
       POSTGRES_DB: ai_platform
-    ports: [ "5432:5432" ]
-    volumes: [ pg:/var/lib/postgresql/data ]
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ai -d ai_platform"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   redis:
     image: redis:7
-    ports: [ "6379:6379" ]
-volumes: { pg: {} }
+    container_name: ai-platform-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  langgraph-service:
+    build:
+      context: ./langgraph-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-langgraph
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://ai:ai@postgres:5432/ai_platform
+      - REDIS_URL=redis://redis:6379
+      - NEST_API_URL=http://host.docker.internal:3000
+      - PORT=8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  pg: {}
